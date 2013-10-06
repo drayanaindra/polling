@@ -1,3 +1,2 @@
-<h1>Polling Application</h1>
-<p>This application build using django framework, you can use DBMS oracle, MySQL, Postgresql or Sqlite3
-for full tutorial, you can visit <a href="http://djangoproject.com">Django</a> site</p>
+Polling Application, This application build using django framework, you can use DBMS oracle, MySQL, Postgresql or Sqlite3
+for full tutorial, you can visit https://www.djangoproject.com/
