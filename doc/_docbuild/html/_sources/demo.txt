@@ -1,0 +1,27 @@
+demo Package
+============
+
+:mod:`settings` Module
+----------------------
+
+.. automodule:: demo.settings
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`urls` Module
+------------------
+
+.. automodule:: demo.urls
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`wsgi` Module
+------------------
+
+.. automodule:: demo.wsgi
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

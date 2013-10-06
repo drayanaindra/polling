@@ -1,0 +1,14 @@
+.total_vote {
+    background-color: #87ADE0;
+}
+
+.total_vote > .nav {
+    width: 100%;
+}
+.total_vote > .nav li > a {
+    color: #383333;
+}
+
+.total_vote .badge {
+    background-color: #6C6C6C;
+}

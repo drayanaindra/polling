@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>polling.forms &mdash; polling 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="polling 0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for polling.forms</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">import</span> <span class="nn">models</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+
+<div class="viewcode-block" id="CreatePollQuestion"><a class="viewcode-back" href="../../polling.html#polling.forms.CreatePollQuestion">[docs]</a><span class="k">class</span> <span class="nc">CreatePollQuestion</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Create Poll Question Form </span>
+<span class="sd">    </span>
+<span class="sd">    define Form attribute and functions</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">question_title</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+        <span class="n">help_text</span> <span class="o">=</span> <span class="s">&#39;Title for your poll. This is required.&#39;</span><span class="p">,</span> 
+        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">())</span>
+    
+    <span class="n">question_text</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">widget</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">Textarea</span><span class="p">(),</span> 
+        <span class="n">help_text</span> <span class="o">=</span> <span class="s">&#39;Some description. This is required.&#39;</span><span class="p">)</span>
+    
+    <span class="n">choice_1</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(),</span>
+        <span class="n">help_text</span> <span class="o">=</span> <span class="s">&#39;Allowed choices for the poll. At least two are required.&#39;</span><span class="p">)</span>
+    
+    <span class="n">choice_2</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(),)</span>
+    
+<div class="viewcode-block" id="CreatePollQuestion.clean"><a class="viewcode-back" href="../../polling.html#polling.forms.CreatePollQuestion.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cleaned_data</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">CreatePollQuestion</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
+        
+        <span class="c"># remove cleaned data</span>
+        <span class="k">for</span> <span class="n">data</span><span class="p">,</span><span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">data</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;csrfmiddlewaretoken&quot;</span><span class="p">,</span>
+                            <span class="s">&#39;question_title&#39;</span><span class="p">,</span>
+                            <span class="s">&#39;question_text&#39;</span><span class="p">,</span>
+                            <span class="s">&#39;request_choice&#39;</span><span class="p">,</span>
+                            <span class="s">&#39;choice_1&#39;</span><span class="p">,</span>
+                            <span class="s">&#39;choice_2&#39;</span>
+                            <span class="s">&#39;&#39;</span><span class="p">]:</span>
+                <span class="c"># check value length must not more than 100 characters</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="n">length</span> <span class="o">&gt;</span> <span class="mi">100</span> <span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_errors</span><span class="p">[</span><span class="n">data</span><span class="p">]</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_class</span><span class="p">([</span><span class="s">u&quot;Ensure characters has no more than 100 (it has </span><span class="si">%s</span><span class="s">)&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">length</span><span class="p">)])</span>
+<span class="c">#         pdb.set_trace()</span>
+        <span class="k">return</span> <span class="n">cleaned_data</span>
+    </div>
+<div class="viewcode-block" id="CreatePollQuestion.save"><a class="viewcode-back" href="../../polling.html#polling.forms.CreatePollQuestion.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Save current Poll and assign clean data to save it to database</span>
+<span class="sd">        </span>
+<span class="sd">        .. Warning::</span>
+<span class="sd">           </span>
+<span class="sd">           Only call save() when form is valid, failure to do so may cause </span>
+<span class="sd">           undesirable error that is cleaned_data not exist, as cleaned_data</span>
+<span class="sd">           only occur when the form is valid</span>
+<span class="sd">        </span>
+<span class="sd">        :param user: user information</span>
+<span class="sd">        :returns: Question Models with recently saved data</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">question</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Question</span><span class="p">(</span>
+           <span class="n">created_by</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> 
+            <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;question_title&#39;</span><span class="p">],</span> 
+            <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;question_text&#39;</span><span class="p">])</span>
+        
+        <span class="n">question</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="c"># get additional data and save it to database</span>
+        <span class="c"># TODO need improvement as checking for data error still not exist</span>
+        <span class="k">for</span> <span class="n">data</span><span class="p">,</span><span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">choice</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">if</span> <span class="n">data</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;csrfmiddlewaretoken&quot;</span><span class="p">,</span>
+                            <span class="s">&#39;question_title&#39;</span><span class="p">,</span>
+                            <span class="s">&#39;question_text&#39;</span><span class="p">,</span>
+                            <span class="s">&#39;request_choice&#39;</span><span class="p">,</span>
+                            <span class="s">&#39;&#39;</span><span class="p">]:</span>
+                <span class="c"># make sure required value are saved using cleaned_data</span>
+                <span class="k">if</span> <span class="n">data</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;choice_1&#39;</span><span class="p">,</span><span class="s">&#39;choice_2&#39;</span><span class="p">]</span> <span class="p">:</span>
+                    <span class="n">choice</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Choice</span><span class="p">(</span>
+                       <span class="n">question</span> <span class="o">=</span> <span class="n">question</span><span class="p">,</span>  
+                       <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="n">data</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">value</span><span class="p">:</span>
+                    <span class="n">choice</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Choice</span><span class="p">(</span>
+                           <span class="n">question</span> <span class="o">=</span> <span class="n">question</span><span class="p">,</span>
+                           <span class="n">text</span> <span class="o">=</span> <span class="n">value</span> <span class="p">)</span>
+                
+                <span class="c"># make sure choice is not empty</span>
+                <span class="k">if</span> <span class="n">choice</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">choice</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            
+        <span class="k">return</span> <span class="n">question</span>
+    </div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, firdan.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

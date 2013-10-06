@@ -1,0 +1,14 @@
+{% load staticfiles %}
+{% for comment in comment_list reversed %}
+<div class="media">
+  <a class="pull-left" href="#">
+    <img class="media-object comment-img-size" src="{% static 'img/Portrait.png' %}">
+  </a>
+  <div class="media-body">
+    <h4 class="media-heading">{{ comment.user }}</h4>
+    <blockquote>
+    	<p>{{ comment.comment }}</p><small>{{ comment.submit_date|timesince }}</small>
+    </blockquote>
+  </div>
+</div>
+{% endfor %}

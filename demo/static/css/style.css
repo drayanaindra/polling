@@ -1,0 +1,30 @@
+body{
+	padding-top: 75px;
+}
+
+a.a-dec{
+	text-decoration: none;
+}
+
+.comment-img-size{
+	width: 95px;
+	background-color: #DDD;
+}
+
+.margin-comment{
+	margin-top: 20px;
+}
+
+.comment-item{
+	margin-left: -40px;
+	margin-top: 20px;
+}
+
+* { font-family:Arial; }
+h2 { padding:0 0 5px 5px; }
+h2 a { color: #224f99; }
+a { color:#999; text-decoration: none; }
+a:hover { color:#802727; }
+p { padding:0 0 5px 0; }
+
+input { padding:5px; border:1px solid #999; border-radius:4px; -moz-border-radius:4px; -web-kit-border-radius:4px; -khtml-border-radius:4px; }

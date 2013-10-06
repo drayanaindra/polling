@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tappolling.tests &mdash; polling 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="polling 0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for tappolling.tests</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This file demonstrates writing tests using the unittest module. These will pass</span>
+<span class="sd">when you run &quot;manage.py test&quot;.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+
+<span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span><span class="p">,</span> <span class="n">Client</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="kn">from</span> <span class="nn">tappolling.models</span> <span class="kn">import</span> <span class="n">Question</span>
+<span class="kn">from</span> <span class="nn">tappolling.forms</span> <span class="kn">import</span> <span class="n">CreatePollQuestion</span>
+
+<div class="viewcode-block" id="create_user"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.create_user">[docs]</a><span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="create_random_user"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.create_random_user">[docs]</a><span class="k">def</span> <span class="nf">create_random_user</span><span class="p">(</span><span class="n">total</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">total</span><span class="p">):</span>
+        <span class="n">create_user</span><span class="p">(</span>
+            <span class="n">create_random_string</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
+            <span class="n">create_random_string</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+        </div>
+<div class="viewcode-block" id="create_random_string"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.create_random_string">[docs]</a><span class="k">def</span> <span class="nf">create_random_string</span><span class="p">(</span><span class="n">total_character</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; crate random string</span>
+<span class="sd">    </span>
+<span class="sd">    still need some works, in the mean time use &#39;a&#39; as a dummy</span>
+<span class="sd">    :param total_character: how long the string will be</span>
+<span class="sd">    :type total_character: integer</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">feed</span><span class="o">=</span><span class="n">string</span><span class="o">.</span><span class="n">printable</span>
+    <span class="n">words</span><span class="o">=</span><span class="s">&quot;&quot;</span>
+    <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">total_character</span><span class="p">:</span>
+        <span class="n">words</span> <span class="o">+=</span> <span class="n">feed</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">feed</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">words</span>
+</div>
+<div class="viewcode-block" id="seed_random"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.seed_random">[docs]</a><span class="k">def</span> <span class="nf">seed_random</span><span class="p">(</span><span class="n">max_integer</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">max_integer</span><span class="p">);</span>
+<span class="c"># still need work , as creating client without login is unknown</span>
+<span class="c"># how to test user from database that already exist?</span></div>
+<div class="viewcode-block" id="populate_poll"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.populate_poll">[docs]</a><span class="k">def</span> <span class="nf">populate_poll</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">create_random_user</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+    <span class="n">user_list</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">total</span><span class="p">):</span>
+        <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">created_by</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">user_list</span><span class="p">),</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">create_random_string</span><span class="p">(</span><span class="n">seed_random</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">create_random_string</span><span class="p">(</span><span class="n">seed_random</span><span class="p">(</span><span class="mi">100</span><span class="p">)),</span>
+            <span class="n">slug</span><span class="o">=</span><span class="n">create_random_string</span><span class="p">(</span><span class="n">seed_random</span><span class="p">(</span><span class="mi">300</span><span class="p">))</span> <span class="p">)</span> 
+    
+    </div>
+<div class="viewcode-block" id="create_dummy_form"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.create_dummy_form">[docs]</a><span class="k">def</span> <span class="nf">create_dummy_form</span><span class="p">(</span><span class="n">title</span><span class="p">,</span><span class="n">text</span><span class="p">,</span><span class="n">fill_choice</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot; create CreatePollQuestion dummy form</span>
+<span class="sd">    </span>
+<span class="sd">    :param title: the title to put on question_title</span>
+<span class="sd">    :type title: string</span>
+<span class="sd">    :param text: text to put on question_description</span>
+<span class="sd">    :type text: string</span>
+<span class="sd">    :param fill_choice: choices to fill with a dummy text</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># fill it with blank for dummy choices</span>
+    <span class="n">count</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">choices</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">while</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">:</span>
+        <span class="n">choices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+        <span class="n">count</span><span class="o">+=</span><span class="mi">1</span>
+    
+    <span class="c"># fill choices based on value on fill_choice    </span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">fill_choice</span><span class="p">:</span>
+        <span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">create_random_string</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="n">dummy_form</span><span class="o">=</span><span class="n">CreatePollQuestion</span><span class="p">(</span>
+                  <span class="p">{</span><span class="s">&quot;question_title&quot;</span><span class="p">:</span><span class="n">title</span><span class="p">,</span>
+                   <span class="s">&quot;question_text&quot;</span> <span class="p">:</span><span class="n">text</span><span class="p">,</span>
+                   <span class="s">&quot;choice_1&quot;</span><span class="p">:</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                   <span class="s">&quot;choice_2&quot;</span><span class="p">:</span><span class="n">choices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                   <span class="s">&quot;choice_3&quot;</span><span class="p">:</span><span class="n">choices</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                   <span class="s">&quot;choice_4&quot;</span><span class="p">:</span><span class="n">choices</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                   <span class="s">&quot;choice_5&quot;</span><span class="p">:</span><span class="n">choices</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+                   <span class="s">&quot;choice_6&quot;</span><span class="p">:</span><span class="n">choices</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+                   <span class="s">&quot;choice_7&quot;</span><span class="p">:</span><span class="n">choices</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+                   <span class="s">&quot;choice_8&quot;</span><span class="p">:</span><span class="n">choices</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+                   <span class="p">})</span>
+    
+    <span class="k">return</span> <span class="n">dummy_form</span>
+</div>
+<div class="viewcode-block" id="QuestionListViewTest"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.QuestionListViewTest">[docs]</a><span class="k">class</span> <span class="nc">QuestionListViewTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="QuestionListViewTest.setUp"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.QuestionListViewTest.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">SESSION_ENGINE</span><span class="p">)</span>
+        <span class="n">store</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">SessionStore</span><span class="p">()</span>
+        <span class="n">store</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>  <span class="c"># we need to make load() work, or the cookie is worthless</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="n">settings</span><span class="o">.</span><span class="n">SESSION_COOKIE_NAME</span><span class="p">]</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">session_key</span>
+    </div>
+<div class="viewcode-block" id="QuestionListViewTest.test_user_authenticated_with_no_poll"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.QuestionListViewTest.test_user_authenticated_with_no_poll">[docs]</a>    <span class="k">def</span> <span class="nf">test_user_authenticated_with_no_poll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; test user when user not logged in</span>
+<span class="sd">        it should return zero poll_questions </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="n">password</span><span class="o">=</span><span class="s">&quot;admin&quot;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;cbv_question_list&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertQuerysetEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s">&#39;poll_questions&#39;</span><span class="p">],[])</span>
+    </div>
+<div class="viewcode-block" id="QuestionListViewTest.test_user_not_auth_with_no_poll"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.QuestionListViewTest.test_user_not_auth_with_no_poll">[docs]</a>    <span class="k">def</span> <span class="nf">test_user_not_auth_with_no_poll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;cbv_question_list&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+<span class="c">#         self.assertContains(response, &quot;&quot;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertQuerysetEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s">&#39;poll_questions&#39;</span><span class="p">],[])</span>
+    </div>
+<div class="viewcode-block" id="QuestionListViewTest.test_user_auth_with_poll"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.QuestionListViewTest.test_user_auth_with_poll">[docs]</a>    <span class="k">def</span> <span class="nf">test_user_auth_with_poll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># user log in</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="n">password</span><span class="o">=</span><span class="s">&quot;admin&quot;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;cbv_question_list&#39;</span><span class="p">))</span>
+        <span class="c"># add dummy data</span>
+        <span class="n">populate_poll</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span><span class="mi">20</span><span class="p">,</span> <span class="s">&quot;failed to see question list with populated poll&quot;</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="QuestionListViewTest.test_user_not_auth_with_poll"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.QuestionListViewTest.test_user_not_auth_with_poll">[docs]</a>    <span class="k">def</span> <span class="nf">test_user_not_auth_with_poll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;cbv_question_list&#39;</span><span class="p">))</span>
+        <span class="c"># add dummy data</span>
+        <span class="n">populate_poll</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span><span class="mi">20</span><span class="p">,</span> <span class="s">&quot;failed to see question list with populated poll&quot;</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="PollMethod"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.PollMethod">[docs]</a><span class="k">class</span> <span class="nc">PollMethod</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    
+<div class="viewcode-block" id="PollMethod.test_create_poll_question"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.PollMethod.test_create_poll_question">[docs]</a>    <span class="k">def</span> <span class="nf">test_create_poll_question</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; testing object creation</span>
+<span class="sd">        </span>
+<span class="sd">        actually this is not necessary, but this exist to check whether the</span>
+<span class="sd">        algorithm to crate dummy objects are working correctly</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">populate_poll</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span><span class="mi">20</span><span class="p">,</span><span class="s">&quot;total created objects not equal&quot;</span><span class="p">)</span>
+        
+<span class="c"># need further reading</span>
+<span class="c"># TODO (firdan) how to make it the dummy model?</span>
+<span class="c">#     def test_user_authenticated_in_listing_poll(self):</span>
+<span class="c">#         return</span>
+
+<span class="c"># need further reading as not known how to create dummy model with User Module        </span>
+<span class="c">#     def test_user_auth_with_listing_poll(self):</span>
+<span class="c">#         return</span>
+</div></div>
+<div class="viewcode-block" id="CreatePollFormTest"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.CreatePollFormTest">[docs]</a><span class="k">class</span> <span class="nc">CreatePollFormTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Test the Poll Views &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CreatePollFormTest.test_for_error_choice_less_than_two"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.CreatePollFormTest.test_for_error_choice_less_than_two">[docs]</a>    <span class="k">def</span> <span class="nf">test_for_error_choice_less_than_two</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">create_dummy_form</span><span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">,</span> <span class="s">&quot;test&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">())</span>
+    </div>
+<div class="viewcode-block" id="CreatePollFormTest.test_all_values_are_inputed"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.CreatePollFormTest.test_all_values_are_inputed">[docs]</a>    <span class="k">def</span> <span class="nf">test_all_values_are_inputed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">create_dummy_form</span><span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">,</span><span class="s">&quot;test&quot;</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">(),</span>                                
+                        <span class="s">&quot;form show an false result on all values are correct&quot;</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="CreatePollFormTest.test_values_inputed_choice_more_than_two_less_than_max"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.CreatePollFormTest.test_values_inputed_choice_more_than_two_less_than_max">[docs]</a>    <span class="k">def</span> <span class="nf">test_values_inputed_choice_more_than_two_less_than_max</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">create_dummy_form</span><span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">,</span><span class="s">&quot;test&quot;</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">())</span>
+    </div>
+<div class="viewcode-block" id="CreatePollFormTest.test_values_inputed_two_choices_on_random"><a class="viewcode-back" href="../../tappolling.html#tappolling.tests.CreatePollFormTest.test_values_inputed_two_choices_on_random">[docs]</a>    <span class="k">def</span> <span class="nf">test_values_inputed_two_choices_on_random</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">create_dummy_form</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">())</span>
+    </div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, firdan.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

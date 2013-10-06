@@ -1,0 +1,21 @@
+{% load staticfiles %}
+
+<html>
+	<head>
+		<title>Demo Page</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+		{% block stylesheet %} {% endblock stylesheet %}
+		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	</head>
+	<body>
+		{% include "menu.html" %}
+		
+		{% block content %}{% endblock content%}
+
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+		
+		{% block scripts %} {% endblock scripts %}
+	</body>
+</html>

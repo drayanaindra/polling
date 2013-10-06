@@ -1,0 +1,11 @@
+templatetags Package
+====================
+
+:mod:`polltags` Module
+----------------------
+
+.. automodule:: tappolling.templatetags.polltags
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

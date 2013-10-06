@@ -1,0 +1,23 @@
+
+{% comment %}
+{% load comments %}
+{% get_comment_form for question as comment_form %}
+
+{% if user.is_authenticated %}
+    <div class="media-body">
+      <form action="{% comment_form_target %}" id="comment-form" method="post" class="comment-form">
+        {% csrf_token %}
+        <input name="honeypot" type="hidden" />
+        <textarea class="form-control" placeholder="Write down your comment..." name="comment"></textarea>
+        {{ comment_form.content_type }}
+        {{ comment_form.object_pk }}
+        {{ comment_form.timestamp }}
+        {{ comment_form.security_hash }}
+        <input type="hidden" name="next" value="{{ question.get_absolute_url }}" />
+        <button class='btn pull-right' type='submit'>Submit Comment</button>
+      </form>
+    </div>
+{% else %}
+    <p>Please <a href="{% url 'auth_login' %}">log in</a> to leave a comment.</p>
+{% endif %}
+{% endcomment %}

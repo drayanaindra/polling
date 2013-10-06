@@ -1,0 +1,44 @@
+{% for question in latest_poll %}
+<div class="container">
+        <p>{{ question.text|capfirst }}</p>
+            {% if request.user.is_staff %}
+        <nav>
+            <a href="{% url tappolling_results question.slug %}" class="button">View current result</a>
+        </nav>
+        {% endif %}
+    
+        <form action="{{ question.get_absolute_url }}" method="post">
+            {% csrf_token %}
+        
+            <fieldset>
+                {% for choice in choices %}
+                    <label class="radio">{{ choice.text }}
+                        <input type="radio" name="choices" value="{{ choice.id }}" />
+                    </label>
+                {% endfor %}
+                
+                
+                {% if form_error %}
+                <span class="invalid-side-note">You need to pick an answer.</span>
+                {% endif %}
+            </fieldset>
+
+            <div style="margin-bottom:5px; text-align:center;">
+            {% if is_auth %}
+            <button type="submit" class="btn btn-nu-orange">Answer Poll</button>
+            {% else %}
+            <a href="#signin" data-toggle="modal"
+            <button type="button" class="btn btn-nu-orange">Answer Poll</button>
+            </a>
+            {% endif %}
+            </div>
+
+            {% if is_auth %}
+            <span>
+                <a href="{% url tappolling_results question.slug %}">Result</a>
+                <a href="{% url tappolling_question_list %}" class="pull-right">Other pollings</a>
+            </span>
+            {% endif %}
+        </form>
+</div>  
+{% endfor %}

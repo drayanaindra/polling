@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Polling User Guide &mdash; polling 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="polling 0.1 documentation" href="index.html" />
+    <link rel="next" title="Polling Package" href="polling.html" />
+    <link rel="prev" title="Polling Documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="polling.html" title="Polling Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Polling Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">polling 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="polling-user-guide">
+<h1>Polling User Guide<a class="headerlink" href="#polling-user-guide" title="Permalink to this headline">¶</a></h1>
+<p>A Polling app that focus on create a poll and allow user to vote.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Source code written using PEP Convention, we espect to you follow it when
+add a modification to the code.</p>
+</div>
+<div class="section" id="feature">
+<h2>Feature<a class="headerlink" href="#feature" title="Permalink to this headline">¶</a></h2>
+<p>Features for this application are:</p>
+<ul class="simple">
+<li>Create, Delete and View a poll</li>
+<li>Multiple choices to create</li>
+</ul>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>use this command to install only django dependecies</p>
+<div class="highlight-python"><pre>$ pip install -r django_requirements.txt</pre>
+</div>
+<p>or use the setup.py</p>
+<div class="highlight-python"><pre>$ pip install setup.py</pre>
+</div>
+<p>add <tt class="docutils literal"><span class="pre">polling</span></tt> to INSTALLED_APPS in <tt class="docutils literal"><span class="pre">setting.py</span></tt></p>
+<div class="highlight-python"><pre>INSTALLED_APPS = (
+...
+'polling',
+)</pre>
+</div>
+<p>synchronize the database</p>
+<div class="highlight-python"><pre>$ python manage.py syncdb</pre>
+</div>
+</div>
+<div class="section" id="setting-up">
+<h2>Setting Up<a class="headerlink" href="#setting-up" title="Permalink to this headline">¶</a></h2>
+<p>This app use a Google API Chart to create Pie Chart using javascript. Thus, it is
+required that browser has cappability to run javascript and connected to internet.</p>
+<div class="section" id="setting-up-base-html">
+<h3>Setting up base.html<a class="headerlink" href="#setting-up-base-html" title="Permalink to this headline">¶</a></h3>
+<p>in parent base.html, use the following structure in the app (google API chart is required when you want to use it)</p>
+<div class="highlight-python"><pre>&lt;head&gt;
+    ...
+    {%block stylesheet%}{%endblock stylesheet%}
+    &lt;!-- jquery --&gt;
+    &lt;script src="http://code.jquery.com/jquery-1.10.1.min.js"&gt;&lt;/script&gt;
+    &lt;!-- google API Chart --&gt;
+    &lt;script type="text/javascript" src="https://www.google.com/jsapi"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    ...
+    {%block scripts%} {%endblock scripts%}
+&lt;/body&gt;</pre>
+</div>
+</div>
+<div class="section" id="changing-chart-script">
+<h3>Changing chart script<a class="headerlink" href="#changing-chart-script" title="Permalink to this headline">¶</a></h3>
+<p>To change Google APi Chart, add the chart script on <tt class="docutils literal"><span class="pre">&lt;head&gt;</span></tt> or in <tt class="docutils literal"><span class="pre">block</span> <span class="pre">scripts</span></tt> or as in the documentation of the required scripts. Then , set up the data on polling/poll_results.html.</p>
+<p>Pie Chart rendered using the following template:</p>
+<div class="highlight-python"><pre>[ {% for data, votes in data_list %} ['{{data}}', {{votes}}],{%endfor%} ];</pre>
+</div>
+<p>Result in javascript:</p>
+<div class="highlight-python"><pre>[['&lt;data&gt;',&lt;value&gt;],['&lt;data&gt;',&lt;value&gt;], ... ]</pre>
+</div>
+<p>Change that to fit on your chart script.</p>
+</div>
+<div class="section" id="css">
+<h3>CSS<a class="headerlink" href="#css" title="Permalink to this headline">¶</a></h3>
+<p>this app using twitter bootstrap 3 as css framework. To make sure that polling displayed
+as in the demo, add bootstrap on <tt class="docutils literal"><span class="pre">&lt;head&gt;</span></tt>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Polling User Guide</a><ul>
+<li><a class="reference internal" href="#feature">Feature</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#setting-up">Setting Up</a><ul>
+<li><a class="reference internal" href="#setting-up-base-html">Setting up base.html</a></li>
+<li><a class="reference internal" href="#changing-chart-script">Changing chart script</a></li>
+<li><a class="reference internal" href="#css">CSS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Polling Documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="polling.html"
+                        title="next chapter">Polling Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/guide.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="polling.html" title="Polling Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Polling Documentation"
+             >previous</a> |</li>
+        <li><a href="index.html">polling 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, firdan.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

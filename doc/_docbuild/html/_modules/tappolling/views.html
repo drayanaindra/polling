@@ -1,0 +1,355 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tappolling.views &mdash; polling 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="polling 0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for tappolling.views</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">views is a Controller for user interface of the app</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render_to_response</span><span class="p">,</span> <span class="n">get_object_or_404</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span><span class="p">,</span> <span class="n">HttpResponseRedirect</span><span class="p">,</span> <span class="n">Http404</span><span class="p">,</span> <span class="n">HttpResponseForbidden</span>
+<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">RequestContext</span>
+<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ObjectDoesNotExist</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">FormView</span><span class="p">,</span><span class="n">ListView</span><span class="p">,</span><span class="n">DeleteView</span>
+<span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">tappolling.forms</span> <span class="kn">import</span> <span class="n">CreatePoll</span>
+<span class="c"># from pygooglechart import PieChart2D,PieChart3D</span>
+
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+<span class="kn">from</span> <span class="nn">django.contrib.admin.views.decorators</span> <span class="kn">import</span> <span class="n">staff_member_required</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+
+<span class="kn">from</span> <span class="nn">endless_pagination.decorators</span> <span class="kn">import</span> <span class="n">page_template</span>
+<span class="kn">from</span> <span class="nn">tappolling.forms</span> <span class="kn">import</span> <span class="n">CreatePollQuestion</span>
+
+<span class="k">if</span> <span class="s">&quot;tapactivitystream&quot;</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">INSTALLED_APPS</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">tapactivitystream.signals</span> <span class="kn">import</span> <span class="n">action</span> <span class="k">as</span> <span class="n">activity_stream</span> 
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">activity_stream</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="c">#this is the original using top down functin     </span>
+<span class="nd">@page_template</span><span class="p">(</span><span class="s">&quot;tappolling/polling_entry.html&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="question_list"><a class="viewcode-back" href="../../tappolling.html#tappolling.views.question_list">[docs]</a><span class="k">def</span> <span class="nf">question_list</span><span class="p">(</span>
+      <span class="n">request</span><span class="p">,</span> 
+      <span class="n">username</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
+      <span class="n">template_name</span><span class="o">=</span><span class="s">&quot;tappolling/question_list.html&quot;</span><span class="p">,</span> 
+      <span class="n">extra_context</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    
+    <span class="n">owner</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">username</span> <span class="ow">and</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">()</span> <span class="p">:</span>
+        <span class="n">user_polls</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span>
+      
+    <span class="k">elif</span> <span class="n">username</span><span class="p">:</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)</span>
+        <span class="n">user_polls</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">created_by</span> <span class="o">=</span> <span class="n">user</span><span class="p">)</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">username</span>
+  
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">user_polls</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="c"># raise Http404</span>
+      
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;user_polls&#39;</span><span class="p">:</span><span class="n">user_polls</span><span class="p">,</span> <span class="s">&#39;owner&#39;</span><span class="p">:</span><span class="n">owner</span><span class="p">}</span>
+      
+    <span class="k">if</span> <span class="n">extra_context</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">extra_context</span><span class="p">)</span>
+          
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="n">template_name</span><span class="p">,</span> 
+                              <span class="n">context</span><span class="p">,</span> 
+                              <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+    </div>
+<span class="nd">@staff_member_required</span>
+<div class="viewcode-block" id="question"><a class="viewcode-back" href="../../tappolling.html#tappolling.views.question">[docs]</a><span class="k">def</span> <span class="nf">question</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; views to show when user click vote button</span>
+<span class="sd">    </span>
+<span class="sd">    :param slug: name of the poll</span>
+<span class="sd">    :returns: redirect result page if user has vote or to vote page if user hasn&#39;t </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slug</span> <span class="o">=</span> <span class="n">slug</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">ObjectDoesNotExist</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">Http404</span>    
+    
+    <span class="n">form_error</span> <span class="o">=</span> <span class="bp">False</span>
+        
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">Answer</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">answered_by</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">):</span>
+        
+            <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;choices&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">):</span>
+        
+                <span class="n">choice_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s">&#39;choices&#39;</span><span class="p">])</span>
+                <span class="n">choice</span> <span class="o">=</span> <span class="n">Choice</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span> <span class="o">=</span> <span class="n">choice_id</span><span class="p">)</span>
+                <span class="n">choice</span><span class="o">.</span><span class="n">total_votes</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">choice</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        
+                <span class="n">answer</span> <span class="o">=</span> <span class="n">Answer</span><span class="p">(</span><span class="n">answered_by</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+                <span class="n">answer</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+                
+                <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">question</span><span class="o">.</span><span class="n">get_results_url</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">form_error</span> <span class="o">=</span> <span class="bp">True</span>
+        
+    <span class="k">if</span> <span class="n">Answer</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">answered_by</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">question</span><span class="o">.</span><span class="n">get_results_url</span><span class="p">())</span>
+            
+    <span class="n">choices</span> <span class="o">=</span> <span class="n">Choice</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">question</span> <span class="o">=</span> <span class="n">question</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;question&#39;</span><span class="p">:</span><span class="n">question</span><span class="p">,</span> 
+               <span class="s">&#39;choices&#39;</span><span class="p">:</span><span class="n">choices</span><span class="p">,</span>
+               <span class="s">&#39;form_error&#39;</span><span class="p">:</span> <span class="n">form_error</span><span class="p">}</span>
+        
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;tappolling/question.html&#39;</span><span class="p">,</span> 
+                               <span class="n">context</span><span class="p">,</span> 
+                               <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="results"><a class="viewcode-back" href="../../tappolling.html#tappolling.views.results">[docs]</a><span class="k">def</span> <span class="nf">results</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slug</span> <span class="o">=</span> <span class="n">slug</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">ObjectDoesNotExist</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">Http404</span>
+        
+    <span class="n">total_votes</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">choice_name</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">choice_val</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c"># this will trick the javascript to think that it was an array</span>
+    <span class="n">array_trick</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+    
+    <span class="k">for</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">question</span><span class="o">.</span><span class="n">choice_set</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+        <span class="n">total_votes</span> <span class="o">+=</span> <span class="n">choice</span><span class="o">.</span><span class="n">total_votes</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">choice</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;&#39;&quot;</span><span class="p">,</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">&#39;&quot;</span><span class="p">)</span>
+<span class="c">#         choice_name.append(choice.text)</span>
+        <span class="n">choice_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">choice_val</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">total_votes</span><span class="p">)</span>
+        <span class="n">array_trick</span> <span class="o">+=</span> <span class="s">&quot;[ </span><span class="se">\&#39;</span><span class="s">{0}</span><span class="se">\&#39;</span><span class="s"> , {1}], &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">text</span><span class="p">,</span><span class="n">choice</span><span class="o">.</span><span class="n">total_votes</span><span class="p">)</span>
+
+    <span class="n">chart_url</span><span class="o">=</span><span class="s">&quot;&quot;</span>
+<span class="c">#     if total_votes &gt; 0:</span>
+<span class="c">#         chart = PieChart3D(500, 200)</span>
+<span class="c">#         chart.add_data(choice_val)</span>
+<span class="c">#         choice_name = [choice_obj.encode(&#39;utf8&#39;) for choice_obj in choice_name]</span>
+<span class="c">#         chart.set_legend(choice_name)</span>
+<span class="c">#         chart.set_title_style(&#39;ffffff&#39;,&#39;14&#39;)</span>
+<span class="c">#         chart.fill_solid(chart.BACKGROUND, &#39;FFEBCC&#39;)</span>
+<span class="c">#         chart.set_colours([&quot;ff9900&quot;, &quot;0078B8&quot;, &quot;23427A&quot;, &quot;A5D20B&quot;, &quot;2AB331&quot;, &quot;794290&quot;, &quot;E5571E&quot;, &quot;CC7621&quot;])</span>
+<span class="c">#         chart.set_colours_within_series([&quot;ff9900&quot;, &quot;0078B8&quot;, &quot;23427A&quot;, &quot;A5D20B&quot;, &quot;2AB331&quot;, &quot;794290&quot;, &quot;E5571E&quot;, &quot;CC7621&quot;])</span>
+<span class="c">#         chart_url = chart.get_url()    </span>
+    
+    
+    <span class="n">title</span> <span class="o">=</span> <span class="n">question</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;&#39;&quot;</span><span class="p">,</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">&#39;&quot;</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;question&#39;</span><span class="p">:</span><span class="n">question</span><span class="p">,</span> 
+               <span class="s">&#39;total_votes&#39;</span><span class="p">:</span><span class="n">total_votes</span><span class="p">,</span> 
+               <span class="s">&#39;chart_url&#39;</span><span class="p">:</span><span class="n">chart_url</span><span class="p">,</span>
+               <span class="s">&#39;array_trick&#39;</span><span class="p">:</span><span class="n">array_trick</span><span class="p">,</span>
+               <span class="s">&#39;jstitle&#39;</span><span class="p">:</span><span class="n">title</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span>
+<span class="c">#               &#39;tappolling/results.html&#39;,</span>
+              <span class="s">&#39;tappolling/poll_results.html&#39;</span><span class="p">,</span> 
+              <span class="n">context</span><span class="p">,</span> 
+              <span class="n">context_instance</span><span class="o">=</span><span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+    </div>
+<span class="nd">@staff_member_required</span>
+<div class="viewcode-block" id="create"><a class="viewcode-back" href="../../tappolling.html#tappolling.views.create">[docs]</a><span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>    
+        <span class="n">form</span> <span class="o">=</span> <span class="n">CreatePoll</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">question</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">activity_stream</span><span class="p">:</span>
+                <span class="n">activity_stream</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> 
+                                     <span class="n">verb</span><span class="o">=</span><span class="s">&#39;just created a poll: &lt;a href=&quot;</span><span class="si">%s</span><span class="s">&quot;&gt;</span><span class="si">%s</span><span class="s">&lt;/a&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">question</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">(),</span> <span class="n">question</span><span class="o">.</span><span class="n">title</span><span class="p">),</span>
+                                     <span class="n">action_object</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+                                     
+            
+            <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">question</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">())</span>
+
+    <span class="k">elif</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">CreatePoll</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span><span class="n">form</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;tappolling/create.html&#39;</span><span class="p">,</span> 
+                              <span class="n">context</span><span class="p">,</span> 
+                              <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+    </div>
+<span class="nd">@staff_member_required</span>
+<div class="viewcode-block" id="delete"><a class="viewcode-back" href="../../tappolling.html#tappolling.views.delete">[docs]</a><span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="n">poll</span> <span class="o">=</span>  <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span><span class="n">pk</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+    
+    <span class="k">if</span> <span class="n">poll</span><span class="o">.</span><span class="n">created_by</span> <span class="o">==</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">:</span>
+        <span class="n">poll</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+<span class="c">#     return HttpResponseRedirect(reverse(&#39;tappolling_question_list&#39;))  #old link</span>
+    <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;cbv_question_list&#39;</span><span class="p">))</span>  <span class="c">#old link</span>
+
+
+<span class="c"># these are using cbv class</span>
+<span class="c"># not all are finished as still need a lot of things to fix</span></div>
+<div class="viewcode-block" id="CreatePollView"><a class="viewcode-back" href="../../tappolling.html#tappolling.views.CreatePollView">[docs]</a><span class="k">class</span> <span class="nc">CreatePollView</span><span class="p">(</span><span class="n">FormView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; class based Create poll view </span>
+<span class="sd">    </span>
+<span class="sd">    create a view where user can create a Poll Question</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c">#: Template that use for CreatePollView</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s">&#39;tappolling/create_poll_form.html&#39;</span>
+    <span class="c">#: form class that use this view</span>
+    <span class="n">form_class</span> <span class="o">=</span> <span class="n">CreatePollQuestion</span>
+    <span class="c">#: where the url redirected when form is valid</span>
+    <span class="n">success_url</span> <span class="o">=</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">&#39;thanks&#39;</span><span class="p">)</span> <span class="c"># temporary</span>
+    
+<div class="viewcode-block" id="CreatePollView.get"><a class="viewcode-back" href="../../tappolling.html#tappolling.views.CreatePollView.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">request</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">CreatePollView</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">HttpResponseForbidden</span><span class="p">(</span><span class="s">&#39;user authentication required to create form&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="CreatePollView.form_valid"><a class="viewcode-back" href="../../tappolling.html#tappolling.views.CreatePollView.form_valid">[docs]</a>    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; check whether the form is valid or not</span>
+<span class="sd">         </span>
+<span class="sd">        :param form: defined in form_class</span>
+<span class="sd">        :returns: a Question absolute url from current data or</span>
+<span class="sd">                  Http 401 when user not authenticated</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+<span class="c">#         if not self.request.user.is_authenticated():</span>
+<span class="c">#             return HttpResponseRedirect(&#39;{0}?next={1}&#39;.format( reverse(&#39;admin:index&#39;),reverse(&#39;cbv_create&#39;) ) ) #temporary until find a better solution</span>
+<span class="c">#             return HttpResponseForbidden(&#39;user authentication required&#39;)</span>
+        
+        <span class="c"># the form will return Question object</span>
+        <span class="n">question</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">question</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">())</span>
+</div></div>
+<div class="viewcode-block" id="QuestionListView"><a class="viewcode-back" href="../../tappolling.html#tappolling.views.QuestionListView">[docs]</a><span class="k">class</span> <span class="nc">QuestionListView</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A list of available Questions &quot;&quot;&quot;</span>
+    
+    <span class="c">#: template that will be used</span>
+    <span class="n">template_name</span><span class="o">=</span><span class="s">&quot;tappolling/poll_question_list.html&quot;</span>
+    <span class="c">#: alternative name for data query</span>
+    <span class="n">context_object_name</span><span class="o">=</span><span class="s">&quot;poll_questions&quot;</span>
+    
+<div class="viewcode-block" id="QuestionListView.get_context_data"><a class="viewcode-back" href="../../tappolling.html#tappolling.views.QuestionListView.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; override context to place in the template &quot;&quot;&quot;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">QuestionListView</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">context</span><span class="p">[</span><span class="s">&#39;current_user&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span>
+<span class="c">#         context[&#39;request_user&#39;]=self.args[0]</span>
+        <span class="k">return</span> <span class="n">context</span>
+    </div>
+<div class="viewcode-block" id="QuestionListView.get_queryset"><a class="viewcode-back" href="../../tappolling.html#tappolling.views.QuestionListView.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; show query for the Question model</span>
+<span class="sd">        </span>
+<span class="sd">        :returns: all object </span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> 
+
+<span class="c"># delay it for a while</span>
+<span class="c"># TODO (firdan) still not working error on get</span>
+<span class="c"># class DeleteQuestionView(DeleteView):</span>
+<span class="c">#     model=Question</span>
+<span class="c">#     success_url = &#39;cbv_question_list&#39;</span>
+<span class="c"># #     success_url=HttpResponseRedirect(reverse(&#39;tappolling_question_list&#39;))</span>
+<span class="c"># #     def get_success_url(self):</span>
+<span class="c"># #         return reverse(&#39;cbv_question_list&#39;)</span>
+<span class="c">#     </span>
+<span class="c">#     def get_object(self):</span>
+<span class="c">#         obj = super(Delete)</span>
+<span class="c">#         </span>
+<span class="c">#     def get_queryset(self):</span>
+<span class="c">#         try:</span>
+<span class="c">#             delete_question = Question.objects.get(</span>
+<span class="c">#                                    created_by__exact=self.request.user, </span>
+<span class="c">#                                    pk=self.kwargs[&#39;pk&#39;])</span>
+<span class="c">#         except delete_question.Does_not_exist:</span>
+<span class="c">#             return HttpResponseForbidden(&#39;question not exist or not allowed to delete question&#39;)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, firdan.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

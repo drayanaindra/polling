@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>templatetags Package &mdash; polling 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="polling 0.1 documentation" href="index.html" />
+    <link rel="up" title="Polling Package" href="polling.html" />
+    <link rel="next" title="tests Package" href="polling.tests.html" />
+    <link rel="prev" title="Polling Package" href="polling.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="polling.tests.html" title="tests Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="polling.html" title="Polling Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="polling.html" accesskey="U">Polling Package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="templatetags-package">
+<h1>templatetags Package<a class="headerlink" href="#templatetags-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-polling.templatetags.polltags">
+<span id="polltags-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">polltags</span></tt> Module<a class="headerlink" href="#module-polling.templatetags.polltags" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="polling.templatetags.polltags.latest_poll">
+<tt class="descclassname">polling.templatetags.polltags.</tt><tt class="descname">latest_poll</tt><big>(</big><em>token</em><big>)</big><a class="reference internal" href="_modules/polling/templatetags/polltags.html#latest_poll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.templatetags.polltags.latest_poll" title="Permalink to this definition">¶</a></dt>
+<dd><p>get latest_poll</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list with latest_poll , choices, and boolean whether user is authorized</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">this function is deprecated and not supported on further release</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="polling.templatetags.polltags.total_poll_count">
+<tt class="descclassname">polling.templatetags.polltags.</tt><tt class="descname">total_poll_count</tt><big>(</big><em>token</em><big>)</big><a class="reference internal" href="_modules/polling/templatetags/polltags.html#total_poll_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.templatetags.polltags.total_poll_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>count the total poll from user (user)</p>
+<p>usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{{</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span> <span class="o">|</span> <span class="n">total_poll_count</span> <span class="p">}}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-polling.templatetags.reusable_tags">
+<span id="reusable-tags-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">reusable_tags</span></tt> Module<a class="headerlink" href="#module-polling.templatetags.reusable_tags" title="Permalink to this headline">¶</a></h2>
+<p>A Reusable tags that hopefully will useful accross many projects</p>
+<dl class="function">
+<dt id="polling.templatetags.reusable_tags.check_exist">
+<tt class="descclassname">polling.templatetags.reusable_tags.</tt><tt class="descname">check_exist</tt><big>(</big><em>search</em>, <em>datas</em><big>)</big><a class="reference internal" href="_modules/polling/templatetags/reusable_tags.html#check_exist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.templatetags.reusable_tags.check_exist" title="Permalink to this definition">¶</a></dt>
+<dd><p>check string in list such ((x,y),(a,b))
+then show result on match.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>search</strong> &#8211; a key value to search , the first index</li>
+<li><strong>datas</strong> &#8211; a list of data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>assume datas has ((&#8216;a&#8217;,b&#8217;),(&#8216;c&#8217;,&#8217;d&#8217;)). then when user do in template</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{{</span> <span class="s">&quot;a&quot;</span> <span class="o">|</span> <span class="n">check_exist</span> <span class="p">}}</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">b</span></tt> will be shown when exist, or return nothing when couldn&#8217;t find a match</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="polling.templatetags.reusable_tags.get_range">
+<tt class="descclassname">polling.templatetags.reusable_tags.</tt><tt class="descname">get_range</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/polling/templatetags/reusable_tags.html#get_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.templatetags.reusable_tags.get_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter - returns a list containing range made from given value created by zalun</p>
+<p>usage (in template):</p>
+<div class="highlight-python"><pre>&lt;ul&gt;{% for i in 3|get_range %}
+  &lt;li&gt;{{ i }}. Do something&lt;/li&gt;
+{% endfor %}&lt;/ul&gt;</pre>
+</div>
+<p>Results with the HTML:</p>
+<div class="highlight-python"><pre>&lt;ul&gt;
+  &lt;li&gt;0. Do something&lt;/li&gt;
+  &lt;li&gt;1. Do something&lt;/li&gt;
+  &lt;li&gt;2. Do something&lt;/li&gt;
+&lt;/ul&gt;</pre>
+</div>
+<p>Instead of 3, any number may use the variable set in the views (need to change the source)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="polling.templatetags.reusable_tags.if_exist">
+<tt class="descclassname">polling.templatetags.reusable_tags.</tt><tt class="descname">if_exist</tt><big>(</big><em>var</em>, <em>output</em><big>)</big><a class="reference internal" href="_modules/polling/templatetags/reusable_tags.html#if_exist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.templatetags.reusable_tags.if_exist" title="Permalink to this definition">¶</a></dt>
+<dd><p>if value is true return output, this is the opposite of default tag in django.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>var</strong> &#8211; common variables</li>
+<li><strong>output</strong> &#8211; string output</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>assume context sent a variable name <tt class="docutils literal"><span class="pre">check</span></tt>, usage(in template):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{{</span> <span class="n">check</span> <span class="o">|</span> <span class="n">if_exist</span><span class="p">:</span><span class="s">&quot;show me something&quot;</span> <span class="p">}}</span>
+</pre></div>
+</div>
+<p>Results :
+When chek is <tt class="docutils literal"><span class="pre">True</span></tt> show <tt class="docutils literal"><span class="pre">show</span> <span class="pre">me</span> <span class="pre">something</span></tt> and when <tt class="docutils literal"><span class="pre">False</span></tt> returns an empty string</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">templatetags Package</a><ul>
+<li><a class="reference internal" href="#module-polling.templatetags.polltags"><tt class="docutils literal"><span class="pre">polltags</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-polling.templatetags.reusable_tags"><tt class="docutils literal"><span class="pre">reusable_tags</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="polling.html"
+                        title="previous chapter">Polling Package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="polling.tests.html"
+                        title="next chapter">tests Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/polling.templatetags.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="polling.tests.html" title="tests Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="polling.html" title="Polling Package"
+             >previous</a> |</li>
+        <li><a href="index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="polling.html" >Polling Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, firdan.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

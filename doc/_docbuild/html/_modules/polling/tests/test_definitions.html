@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>polling.tests.test_definitions &mdash; polling 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="polling 0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="polling.tests" href="../tests.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../tests.html" accesskey="U">polling.tests</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for polling.tests.test_definitions</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">string</span>
+
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span><span class="p">,</span><span class="n">UserManager</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
+
+<span class="kn">from</span> <span class="nn">polling.models</span> <span class="kn">import</span> <span class="n">Question</span><span class="p">,</span> <span class="n">Choice</span><span class="p">,</span> <span class="n">Answer</span>
+<span class="kn">from</span> <span class="nn">polling.forms</span> <span class="kn">import</span> <span class="n">CreatePollQuestion</span>
+
+<span class="c"># models</span>
+<div class="viewcode-block" id="create_user"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_definitions.create_user">[docs]</a><span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="create_question"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_definitions.create_question">[docs]</a><span class="k">def</span> <span class="nf">create_question</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;title&#39;</span><span class="p">,</span><span class="n">text</span><span class="o">=</span><span class="s">&#39;text&#39;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">created_by</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="create_choices"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_definitions.create_choices">[docs]</a><span class="k">def</span> <span class="nf">create_choices</span><span class="p">(</span><span class="n">question_model</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">&quot;text&quot;</span><span class="p">,</span> <span class="n">total_votes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Choice</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question_model</span><span class="p">,</span> 
+                                 <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> 
+                                 <span class="n">total_votes</span><span class="o">=</span><span class="n">total_votes</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="create_answer"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_definitions.create_answer">[docs]</a><span class="k">def</span> <span class="nf">create_answer</span><span class="p">(</span><span class="n">question</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Answer</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span><span class="n">answered_by</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="create_user_using_manager"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_definitions.create_user_using_manager">[docs]</a><span class="k">def</span> <span class="nf">create_user_using_manager</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">):</span>
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">UserManager</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">manager</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="create_random_user"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_definitions.create_random_user">[docs]</a><span class="k">def</span> <span class="nf">create_random_user</span><span class="p">(</span><span class="n">total</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">total</span><span class="p">):</span>
+        <span class="n">create_user</span><span class="p">(</span>
+            <span class="n">create_random_string</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
+            <span class="n">create_random_string</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+        </div>
+<div class="viewcode-block" id="create_random_string"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_definitions.create_random_string">[docs]</a><span class="k">def</span> <span class="nf">create_random_string</span><span class="p">(</span><span class="n">total_character</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; create random string</span>
+<span class="sd">    </span>
+<span class="sd">    :param total_character: how long the string will be</span>
+<span class="sd">    :type total_character: integer</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">feed</span><span class="o">=</span><span class="n">string</span><span class="o">.</span><span class="n">printable</span>
+    <span class="n">words</span><span class="o">=</span><span class="s">&quot;&quot;</span>
+    <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">total_character</span><span class="p">:</span>
+        <span class="n">words</span> <span class="o">+=</span> <span class="n">feed</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">feed</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">words</span>
+</div>
+<div class="viewcode-block" id="seed_random"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_definitions.seed_random">[docs]</a><span class="k">def</span> <span class="nf">seed_random</span><span class="p">(</span><span class="n">max_integer</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">max_integer</span><span class="p">);</span>
+</div>
+<div class="viewcode-block" id="populate_poll"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_definitions.populate_poll">[docs]</a><span class="k">def</span> <span class="nf">populate_poll</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="n">total</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; populate question object with random string and user &quot;&quot;&quot;</span>
+    <span class="n">user_list</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="c">#     create random user only when user argument empty</span>
+    <span class="k">if</span> <span class="n">user</span> <span class="o">==</span> <span class="s">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">create_random_user</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">user_list</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">total</span><span class="p">):</span>
+        <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">created_by</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">user_list</span><span class="p">)</span> <span class="k">if</span> <span class="n">user_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">user</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">create_random_string</span><span class="p">(</span><span class="n">seed_random</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">create_random_string</span><span class="p">(</span><span class="n">seed_random</span><span class="p">(</span><span class="mi">300</span><span class="p">)),</span>
+            <span class="n">slug</span><span class="o">=</span><span class="n">create_random_string</span><span class="p">(</span><span class="n">seed_random</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span> <span class="p">)</span> 
+    </div>
+<div class="viewcode-block" id="create_dummy_form"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_definitions.create_dummy_form">[docs]</a><span class="k">def</span> <span class="nf">create_dummy_form</span><span class="p">(</span><span class="n">title</span><span class="p">,</span><span class="n">text</span><span class="p">,</span><span class="n">fill_choice</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot; create CreatePollQuestion dummy form</span>
+<span class="sd">    </span>
+<span class="sd">    :param title: the title to put on question_title</span>
+<span class="sd">    :type title: string</span>
+<span class="sd">    :param text: text to put on question_description</span>
+<span class="sd">    :type text: string</span>
+<span class="sd">    :param fill_choice: choices to fill with a dummy text</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># fill it with blank for dummy choices</span>
+    <span class="n">count</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">choices</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">while</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">:</span>
+        <span class="n">choices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+        <span class="n">count</span><span class="o">+=</span><span class="mi">1</span>
+    
+    <span class="c"># fill choices based on value on fill_choice    </span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">fill_choice</span><span class="p">:</span>
+        <span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">create_random_string</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="n">dummy_form</span><span class="o">=</span><span class="n">CreatePollQuestion</span><span class="p">(</span>
+                  <span class="p">{</span><span class="s">&quot;question_title&quot;</span><span class="p">:</span><span class="n">title</span><span class="p">,</span>
+                   <span class="s">&quot;question_text&quot;</span> <span class="p">:</span><span class="n">text</span><span class="p">,</span>
+                   <span class="s">&quot;choice_1&quot;</span><span class="p">:</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                   <span class="s">&quot;choice_2&quot;</span><span class="p">:</span><span class="n">choices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                   <span class="s">&quot;choice_3&quot;</span><span class="p">:</span><span class="n">choices</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                   <span class="s">&quot;choice_4&quot;</span><span class="p">:</span><span class="n">choices</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                   <span class="s">&quot;choice_5&quot;</span><span class="p">:</span><span class="n">choices</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+                   <span class="s">&quot;choice_6&quot;</span><span class="p">:</span><span class="n">choices</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+                   <span class="s">&quot;choice_7&quot;</span><span class="p">:</span><span class="n">choices</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+                   <span class="s">&quot;choice_8&quot;</span><span class="p">:</span><span class="n">choices</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+                   <span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">dummy_form</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../tests.html" >polling.tests</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, firdan.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

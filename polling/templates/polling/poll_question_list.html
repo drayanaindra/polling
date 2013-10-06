@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="container">
+<div class="jumbotron">
+  <div class="container">
+    <h1> All Polling Questions</h1>
+    <p>This is polling Application, you can make a polling using this application</p>
+        <p><a class="btn btn-primary btn-lg" href="{% url 'polling:create' %}">Create Polling</a></p>
+  </div>
+</div>
+
+{% if poll_questions %}
+    {% for poll in poll_questions %}
+    <div class="col-xs-6">
+      <h2><a href="{{ poll.get_absolute_url}}">{{poll.title}}</a></h2>
+      <span>{{ poll.created_on | timesince }} ago </span>
+      <p>{{ poll.text }}</p>
+      <div>
+        <a href="{% url 'polling:tappolling_results' poll.slug %}" class="btn btn-default">result</a>
+        <a href="{% url 'polling:tappolling_question' poll.slug %}" class="btn btn-default">vote</a>
+        {% if user.id == poll.created_by_id %}
+        <form action="{% url 'polling:delete' poll.id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name='pk' value={{poll.id}}>
+            <input class="btn btn-danger pull-right" type="submit" value="Delete" />
+        </form>
+        {% endif %}
+      </div>
+    </div>  
+    {% endfor %}
+{% else %}
+  <h2>No polls are available</h2>
+{% endif %}
+</div>
+
+{% endblock content %}
+
+
+{% block scripts %}
+{{ block.super }}
+
+<script type="text/javascript">
+  
+  // change link to #
+  $(".btn.btn-danger").click (function (event) {
+    event.preventDefault();
+    
+    var title = $(this).parent().parent().parent().find("h2 a").text();
+    // show confirmation
+    var c = confirm ('Do you want to delete ' + title + ' ? ');
+    
+    if ( c ) {
+      $(this).parent().submit();
+      return true;
+    } else {
+      return false;
+    }
+    
+  });
+</script>
+{% endblock scripts %}

@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tappolling.forms &mdash; polling 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="polling 0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for tappolling.forms</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: forms</span>
+<span class="sd">   :platform: Python</span>
+<span class="sd">   :synopsis: A useful module indeed.</span>
+
+<span class="sd">.. moduleauthor:: Andrew Carter &lt;andrew@invalid.com&gt;</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">import</span> <span class="nn">models</span>
+
+<span class="kn">from</span> <span class="nn">uni_form.helper</span> <span class="kn">import</span> <span class="n">FormHelper</span>
+<span class="kn">from</span> <span class="nn">uni_form.layout</span> <span class="kn">import</span> <span class="n">Layout</span><span class="p">,</span> <span class="n">ButtonHolder</span><span class="p">,</span> <span class="n">Submit</span><span class="p">,</span> <span class="n">Fieldset</span>
+
+<div class="viewcode-block" id="CreatePoll"><a class="viewcode-back" href="../../tappolling.html#tappolling.forms.CreatePoll">[docs]</a><span class="k">class</span> <span class="nc">CreatePoll</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Legacy Form class created by Richard, please refer to him for inquiry &quot;&quot;&quot;</span>
+    <span class="n">question_title</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">help_text</span> <span class="o">=</span> <span class="s">&#39;Title for your poll. This is required.&#39;</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span><span class="s">&#39;form-control&#39;</span><span class="p">}))</span>
+    <span class="n">question_text</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">widget</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">Textarea</span><span class="p">,</span> <span class="n">help_text</span> <span class="o">=</span> <span class="s">&#39;Some description. This is required.&#39;</span><span class="p">)</span>
+    <span class="n">choice_1</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">help_text</span> <span class="o">=</span> <span class="s">&#39;Allowed choices for the poll. At least two are required.&#39;</span><span class="p">)</span>
+    <span class="n">choice_2</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">()</span>
+    <span class="n">choice_3</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">required</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">choice_4</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">required</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">choice_5</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">required</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">choice_6</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">required</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">choice_7</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">required</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">choice_8</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">required</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+        <span class="k">return</span>  <span class="nb">super</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        
+<div class="viewcode-block" id="CreatePoll.save"><a class="viewcode-back" href="../../tappolling.html#tappolling.forms.CreatePoll.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Save current Poll</span>
+<span class="sd">            </span>
+<span class="sd">            Args:</span>
+<span class="sd">                user: user object</span>
+<span class="sd">                </span>
+<span class="sd">            Returns:  </span>
+<span class="sd">                Question Class with recently input and user that create it</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">question</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Question</span><span class="p">(</span>
+           <span class="n">created_by</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> 
+           <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;question_title&#39;</span><span class="p">],</span> 
+           <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;question_text&#39;</span><span class="p">])</span>
+        
+        <span class="n">question</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;question_title&#39;</span><span class="p">,</span><span class="s">&#39;question_text&#39;</span><span class="p">]:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="n">field</span><span class="p">]:</span>
+                <span class="n">choice</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Choice</span><span class="p">(</span>
+                   <span class="n">question</span> <span class="o">=</span> <span class="n">question</span><span class="p">,</span> 
+                   <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="n">field</span><span class="p">])</span>
+                <span class="n">choice</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">question</span>
+    </div></div>
+<div class="viewcode-block" id="CreatePollQuestion"><a class="viewcode-back" href="../../tappolling.html#tappolling.forms.CreatePollQuestion">[docs]</a><span class="k">class</span> <span class="nc">CreatePollQuestion</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Create Poll Question Form </span>
+<span class="sd">    </span>
+<span class="sd">    define Form attribute and functions</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c">#: title of the question</span>
+    <span class="n">question_title</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">help_text</span> <span class="o">=</span> <span class="s">&#39;Title for your poll. This is required.&#39;</span><span class="p">,</span> 
+        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span><span class="s">&#39;form-control&#39;</span><span class="p">}))</span>
+    
+    <span class="c">#: short description of  the question</span>
+    <span class="n">question_text</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">widget</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">Textarea</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span><span class="s">&#39;form-control&#39;</span><span class="p">}),</span> 
+        <span class="n">help_text</span> <span class="o">=</span> <span class="s">&#39;Some description. This is required.&#39;</span><span class="p">)</span>
+    
+    <span class="c">#: required choice, define what to choose in the question</span>
+    <span class="n">choice_1</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span><span class="s">&#39;form-control&#39;</span><span class="p">}),</span>
+        <span class="n">help_text</span> <span class="o">=</span> <span class="s">&#39;Allowed choices for the poll. At least two are required.&#39;</span><span class="p">)</span>
+    
+    <span class="c">#: required choice </span>
+    <span class="n">choice_2</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span><span class="s">&#39;form-control&#39;</span><span class="p">}),)</span>
+    
+    <span class="c">#: optional choice</span>
+    <span class="n">choice_3</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span><span class="s">&#39;form-control&#39;</span><span class="p">}),</span>
+        <span class="n">required</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="c">#: optional choice</span>
+    <span class="n">choice_4</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span><span class="s">&#39;form-control&#39;</span><span class="p">}),</span>
+        <span class="n">required</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="c">#: optional choice</span>
+    <span class="n">choice_5</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span><span class="s">&#39;form-control&#39;</span><span class="p">}),</span>
+        <span class="n">required</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="c">#: optional choice</span>
+    <span class="n">choice_6</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span><span class="s">&#39;form-control&#39;</span><span class="p">}),</span>
+        <span class="n">required</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="c">#: optional choice</span>
+    <span class="n">choice_7</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span><span class="s">&#39;form-control&#39;</span><span class="p">}),</span>
+        <span class="n">required</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="c">#: optional choice</span>
+    <span class="n">choice_8</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;class&#39;</span><span class="p">:</span><span class="s">&#39;form-control&#39;</span><span class="p">}),</span>
+        <span class="n">required</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="CreatePollQuestion.save"><a class="viewcode-back" href="../../tappolling.html#tappolling.forms.CreatePollQuestion.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Save current Poll</span>
+<span class="sd">        </span>
+<span class="sd">        .. Warning::</span>
+<span class="sd">           </span>
+<span class="sd">           Only call save() when form is valid, failure to do so may cause </span>
+<span class="sd">           undesirable error that is cleaned_data not exist, as cleaned_data</span>
+<span class="sd">           only occur when the form is valid</span>
+<span class="sd">        </span>
+<span class="sd">        :param user: user information</span>
+<span class="sd">        :returns: Question Models with recently saved data</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">question</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Question</span><span class="p">(</span>
+           <span class="n">created_by</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> 
+            <span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;question_title&#39;</span><span class="p">],</span> 
+            <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;question_text&#39;</span><span class="p">])</span>
+        
+        <span class="n">question</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;question_title&#39;</span><span class="p">,</span><span class="s">&#39;question_text&#39;</span><span class="p">]:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="n">field</span><span class="p">]:</span>
+                <span class="n">choice</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Choice</span><span class="p">(</span>
+                   <span class="n">question</span> <span class="o">=</span> <span class="n">question</span><span class="p">,</span> 
+                   <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="n">field</span><span class="p">])</span>
+                <span class="n">choice</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        
+        <span class="k">return</span> <span class="n">question</span>
+    </div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, firdan.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

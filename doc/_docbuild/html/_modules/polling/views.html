@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>polling.views &mdash; polling 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="polling 0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for polling.views</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">views is a Controller for user interface of the app</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+<span class="kn">import</span> <span class="nn">re</span> 
+
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render_to_response</span><span class="p">,</span> <span class="n">get_object_or_404</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span><span class="p">,</span> <span class="n">HttpResponseRedirect</span><span class="p">,</span> <span class="n">Http404</span><span class="p">,</span> <span class="n">HttpResponseForbidden</span>
+<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">RequestContext</span>
+<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ObjectDoesNotExist</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">reverse_lazy</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span><span class="p">,</span> <span class="n">permission_required</span>
+<span class="kn">from</span> <span class="nn">django.contrib.admin.views.decorators</span> <span class="kn">import</span> <span class="n">staff_member_required</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">FormView</span><span class="p">,</span><span class="n">ListView</span><span class="p">,</span><span class="n">DeleteView</span><span class="p">,</span><span class="n">DetailView</span><span class="p">,</span><span class="n">TemplateView</span><span class="p">,</span><span class="n">View</span>
+<span class="kn">from</span> <span class="nn">django.utils.decorators</span> <span class="kn">import</span> <span class="n">method_decorator</span>
+
+<span class="kn">from</span> <span class="nn">polling.forms</span> <span class="kn">import</span> <span class="n">CreatePollQuestion</span>
+<span class="kn">from</span> <span class="nn">polling.models</span> <span class="kn">import</span> <span class="n">Question</span><span class="p">,</span><span class="n">Answer</span><span class="p">,</span><span class="n">Choice</span><span class="p">,</span><span class="n">PollManager</span>
+
+<div class="viewcode-block" id="PollQuestion"><a class="viewcode-back" href="../../polling.html#polling.views.PollQuestion">[docs]</a><span class="k">class</span> <span class="nc">PollQuestion</span><span class="p">(</span><span class="n">DetailView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    using @method_decorator(login_required) because will redirect to form login user</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s">&#39;polling/question.html&#39;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="bp">None</span>
+    
+    <span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">)</span>
+<div class="viewcode-block" id="PollQuestion.get"><a class="viewcode-back" href="../../polling.html#polling.views.PollQuestion.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        using @method_decorator(login_required) because if user not have user auth,</span>
+<span class="sd">        application will redirect to form login user, this class need django-registration application</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slug</span> <span class="o">=</span> <span class="n">slug</span><span class="p">)</span>
+        <span class="n">choices</span> <span class="o">=</span> <span class="n">Choice</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">question__slug</span> <span class="o">=</span> <span class="n">slug</span><span class="p">)</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;question&#39;</span><span class="p">:</span><span class="n">question</span><span class="p">,</span>
+            <span class="s">&#39;choices&#39;</span><span class="p">:</span><span class="n">choices</span>
+        <span class="p">}</span>
+        
+        <span class="k">if</span> <span class="n">Answer</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">answered_by</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;polling:tappolling_results&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">question</span><span class="o">.</span><span class="n">slug</span><span class="p">]))</span>
+
+        <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span>
+                <span class="s">&#39;polling/question.html&#39;</span><span class="p">,</span>
+                <span class="n">context</span><span class="p">,</span> 
+                <span class="n">context_instance</span><span class="o">=</span><span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">),</span>
+            <span class="p">)</span>
+</div>
+<div class="viewcode-block" id="PollQuestion.post"><a class="viewcode-back" href="../../polling.html#polling.views.PollQuestion.post">[docs]</a>    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
+
+        <span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slug</span> <span class="o">=</span> <span class="n">slug</span><span class="p">)</span>
+        <span class="n">choices</span> <span class="o">=</span> <span class="n">Choice</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">question__slug</span> <span class="o">=</span> <span class="n">slug</span><span class="p">)</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+           <span class="s">&#39;question&#39;</span><span class="p">:</span><span class="n">question</span><span class="p">,</span>
+           <span class="s">&#39;choices&#39;</span><span class="p">:</span><span class="n">choices</span><span class="p">,</span>
+           <span class="s">&#39;error&#39;</span><span class="p">:</span><span class="s">&#39;please choose one&#39;</span>
+        <span class="p">}</span>
+        
+        <span class="n">form_error</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">Answer</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">answered_by</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;choices&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">):</span>
+                <span class="n">choice_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s">&#39;choices&#39;</span><span class="p">])</span>
+                
+                <span class="n">choices</span> <span class="o">=</span> <span class="n">Choice</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">choice_id</span><span class="p">)</span>
+                
+                <span class="k">for</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">choices</span><span class="p">:</span>
+                    <span class="n">choice</span><span class="o">.</span><span class="n">update_total_votes</span><span class="p">()</span>
+                
+                <span class="n">answer</span> <span class="o">=</span> <span class="n">Answer</span><span class="p">(</span><span class="n">answered_by</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+                <span class="n">answer</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+                <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;polling:tappolling_results&#39;</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">question</span><span class="o">.</span><span class="n">slug</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">template_name</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span><span class="n">context_instance</span><span class="o">=</span><span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">))</span> 
+</div></div>
+<div class="viewcode-block" id="PollResults"><a class="viewcode-back" href="../../polling.html#polling.views.PollResults">[docs]</a><span class="k">class</span> <span class="nc">PollResults</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    this class for showing all votes result</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="PollResults.get"><a class="viewcode-back" href="../../polling.html#polling.views.PollResults.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">request</span><span class="p">,</span><span class="n">slug</span><span class="p">):</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slug</span> <span class="o">=</span> <span class="n">slug</span><span class="p">)</span>
+            <span class="sd">&quot;&quot;&quot; make global objects for question with filter using slug &quot;&quot;&quot;</span>
+        <span class="k">except</span> <span class="n">question</span><span class="o">.</span><span class="n">ObjectDoesNotExist</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Http404</span>
+            
+        <span class="n">total_votes</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">choice_name</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">choice_val</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">data_list</span><span class="o">=</span><span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">question</span><span class="o">.</span><span class="n">choice_set</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="n">total_votes</span> <span class="o">+=</span> <span class="n">choice</span><span class="o">.</span><span class="n">total_votes</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">choice</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;&#39;&quot;</span><span class="p">,</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">&#39;&quot;</span><span class="p">)</span>
+            <span class="n">choice_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="n">choice_val</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">choice</span><span class="o">.</span><span class="n">total_votes</span><span class="p">)</span>
+            <span class="n">data_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">r&quot;&#39;&quot;</span><span class="p">,</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">&#39;&quot;</span><span class="p">,</span><span class="n">choice</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="p">,</span><span class="n">choice</span><span class="o">.</span><span class="n">total_votes</span><span class="p">))</span> 
+
+        <span class="n">chart_url</span><span class="o">=</span><span class="s">&quot;&quot;</span>
+        
+        <span class="n">title</span> <span class="o">=</span> <span class="n">question</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;&#39;&quot;</span><span class="p">,</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">&#39;&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">total_votes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">temp_polling</span> <span class="o">=</span> <span class="s">&#39;polling/not_polling.html&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">temp_polling</span> <span class="o">=</span> <span class="s">&#39;polling/poll_results.html&#39;</span> 
+            
+        <span class="n">poll_questions</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">id_question</span> <span class="ow">in</span> <span class="n">poll_questions</span><span class="p">:</span>
+            <span class="n">idquestion</span> <span class="o">=</span> <span class="n">id_question</span><span class="o">.</span><span class="n">id</span>
+
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;question&#39;</span><span class="p">:</span><span class="n">question</span><span class="p">,</span>
+                   <span class="s">&#39;total_votes&#39;</span><span class="p">:</span><span class="n">total_votes</span><span class="p">,</span> 
+                   <span class="s">&#39;chart_url&#39;</span><span class="p">:</span><span class="n">chart_url</span><span class="p">,</span>
+                   <span class="s">&#39;jstitle&#39;</span><span class="p">:</span><span class="n">title</span><span class="p">,</span>
+                   <span class="s">&#39;poll_questions&#39;</span><span class="p">:</span><span class="n">poll_questions</span><span class="p">,</span>
+                   <span class="s">&#39;data_list&#39;</span><span class="p">:</span><span class="n">data_list</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span>
+                  <span class="n">temp_polling</span><span class="p">,</span> 
+                  <span class="n">context</span><span class="p">,</span> 
+                  <span class="n">context_instance</span><span class="o">=</span><span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+    
+</div></div>
+<div class="viewcode-block" id="DeletePollView"><a class="viewcode-back" href="../../polling.html#polling.views.DeletePollView">[docs]</a><span class="k">class</span> <span class="nc">DeletePollView</span><span class="p">(</span><span class="n">DeleteView</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">Question</span>
+    <span class="n">success_url</span><span class="o">=</span><span class="n">reverse_lazy</span><span class="p">(</span><span class="s">&#39;polling:question_list&#39;</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="DeletePollView.get"><a class="viewcode-back" href="../../polling.html#polling.views.DeletePollView.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; safe guard to make sure anybody beside the owner, can not delete poll &quot;&quot;&quot;</span>
+<span class="c">#         questions = Question.objects.filter(pk=kwargs[&#39;pk&#39;])</span>
+        <span class="n">question</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span><span class="n">pk</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;pk&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">question</span><span class="o">.</span><span class="n">created_by</span> <span class="o">==</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="n">DeleteView</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="n">HttpResponseForbidden</span><span class="p">(</span><span class="s">&#39;you are not allowed to do this&#39;</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="DeletePollView.post"><a class="viewcode-back" href="../../polling.html#polling.views.DeletePollView.post">[docs]</a>    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">question</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span><span class="n">pk</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;pk&#39;</span><span class="p">])</span>
+        
+        <span class="k">if</span> <span class="n">question</span><span class="o">.</span><span class="n">created_by</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="n">DeleteView</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="n">HttpResponseForbidden</span><span class="p">(</span><span class="s">&#39;you are not allowed to do this&#39;</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="CreatePollView"><a class="viewcode-back" href="../../polling.html#polling.views.CreatePollView">[docs]</a><span class="k">class</span> <span class="nc">CreatePollView</span><span class="p">(</span><span class="n">FormView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; class based Create poll view </span>
+<span class="sd">    create a view where user can create a Poll Question</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s">&#39;polling/poll_create_form.html&#39;</span>
+    <span class="n">form_class</span> <span class="o">=</span> <span class="n">CreatePollQuestion</span>
+    <span class="n">args</span><span class="o">=</span><span class="p">[]</span>
+    
+<div class="viewcode-block" id="CreatePollView.get_context_data"><a class="viewcode-back" href="../../polling.html#polling.views.CreatePollView.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; pass args form get to template as context </span>
+<span class="sd">        </span>
+<span class="sd">        the add_choices context is to give how many additional input choices</span>
+<span class="sd">        to the form</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+      
+        <span class="n">context</span> <span class="o">=</span> <span class="n">FormView</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        
+        <span class="c"># checking from POST request</span>
+        <span class="n">request_choice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;request_choice&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">last_choice</span> <span class="o">=</span> <span class="nb">int</span> <span class="p">(</span><span class="n">request_choice</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">request_choice</span> <span class="k">else</span> <span class="mi">0</span>
+        
+        <span class="c"># assign from last_choice, ignore from GET, because input from POST</span>
+        <span class="c"># from javascript has higher precedence than GET</span>
+        <span class="k">if</span> <span class="n">last_choice</span> <span class="p">:</span>
+            <span class="n">context</span><span class="p">[</span><span class="s">&#39;add_choices&#39;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">last_choice</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="c"># checking from arguments (GET)</span>
+            <span class="c"># get previous total choices in the form, if exist</span>
+            <span class="n">previous</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="k">if</span> <span class="nb">len</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="n">context</span><span class="p">[</span><span class="s">&#39;add_choices&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">previous</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+        
+        <span class="k">return</span> <span class="n">context</span> 
+    </div>
+    <span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">)</span>
+<div class="viewcode-block" id="CreatePollView.get"><a class="viewcode-back" href="../../polling.html#polling.views.CreatePollView.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; a safe guard to make sure that user is already authenticated</span>
+<span class="sd">        </span>
+<span class="sd">        :returns: if user is authenticated return form page OR return to form user login</span>
+<span class="sd">        using overiding @method_decorator(login_required)</span>
+<span class="sd">                  </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">=</span><span class="n">args</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+             <span class="k">return</span> <span class="n">FormView</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    </div>
+<div class="viewcode-block" id="CreatePollView.form_valid"><a class="viewcode-back" href="../../polling.html#polling.views.CreatePollView.form_valid">[docs]</a>    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; check whether the form is valid or not using CreatPollQuestion</span>
+<span class="sd">         </span>
+<span class="sd">        :param form: defined in form_class</span>
+<span class="sd">        :returns: Redirect to recently created poll</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">question</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&#39;polling:tappolling_question&#39;</span><span class="p">,</span> 
+                                             <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">question</span><span class="o">.</span><span class="n">slug</span><span class="p">]</span> <span class="p">))</span>
+</div></div>
+<div class="viewcode-block" id="QuestionListView"><a class="viewcode-back" href="../../polling.html#polling.views.QuestionListView">[docs]</a><span class="k">class</span> <span class="nc">QuestionListView</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A list of available Questions &quot;&quot;&quot;</span>
+    <span class="n">template_name</span><span class="o">=</span><span class="s">&quot;polling/poll_question_list.html&quot;</span>
+    <span class="n">context_object_name</span><span class="o">=</span><span class="s">&quot;poll_questions&quot;</span>
+    
+<div class="viewcode-block" id="QuestionListView.render_to_response"><a class="viewcode-back" href="../../polling.html#polling.views.QuestionListView.render_to_response">[docs]</a>    <span class="k">def</span> <span class="nf">render_to_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Override to include request context &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">QuestionListView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">render_to_response</span><span class="p">(</span>
+                <span class="n">RequestContext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span>
+                               <span class="n">context</span><span class="p">,</span>
+                               <span class="p">),</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="QuestionListView.get_queryset"><a class="viewcode-back" href="../../polling.html#polling.views.QuestionListView.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; show query for the Question model</span>
+<span class="sd">        </span>
+<span class="sd">        :returns: all object </span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> </div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, firdan.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

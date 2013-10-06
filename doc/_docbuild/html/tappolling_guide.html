@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tappolling User Guide &mdash; tappolling 0.5 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="tappolling 0.5 documentation" href="index.html" />
+    <link rel="next" title="tappolling Package" href="tappolling.html" />
+    <link rel="prev" title="Welcome to tappolling’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tappolling.html" title="tappolling Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to tappolling’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">tappolling 0.5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tappolling-user-guide">
+<h1>Tappolling User Guide<a class="headerlink" href="#tappolling-user-guide" title="Permalink to this headline">¶</a></h1>
+<p>This application purpose is to create an interactive polling.</p>
+<div class="section" id="pip-requirements-user-guide">
+<h2>PIP Requirements user guide<a class="headerlink" href="#pip-requirements-user-guide" title="Permalink to this headline">¶</a></h2>
+<p>as it is necessary to install the requirements to prevent unnecessary server
+error, below are the guide to how to install the requirements.</p>
+<div class="section" id="requirements-files">
+<h3>Requirements Files<a class="headerlink" href="#requirements-files" title="Permalink to this headline">¶</a></h3>
+<p>A key idea in <tt class="docutils literal"><span class="pre">pip</span></tt> is that package versions listed in requirement files
+(or as <tt class="docutils literal"><span class="pre">pip</span></tt> install arguments), have precedence over those that are located during
+the normal dependency resolution process that uses “install_requires” metadata.</p>
+<p>This allows users to be in control of specifying an environment of packages that
+are known to work together.</p>
+<p>Instead of running something like <tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">MyApp</span></tt> and getting whatever
+libraries come along, you’d run <tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></tt>
+where “requirements.txt” contains something like:</p>
+<div class="highlight-python"><pre>MyApp
+Framework==0.9.4
+Library&gt;=0.2</pre>
+</div>
+<p>Regardless of what MyApp lists in <tt class="docutils literal"><span class="pre">setup.py</span></tt>, you’ll get a specific
+version of Framework (0.9.4) and at least the 0.2 version of Library.
+Additionally, you can add optional libraries and support tools that MyApp
+doesn’t strictly require, giving people a set of recommended libraries.</p>
+<p>To create a new requirements file from a known working environment, use:</p>
+<div class="highlight-python"><pre>$ pip freeze &gt; stable-req.txt</pre>
+</div>
+<p>This will write a listing of all installed libraries to stable-req.txt
+with exact versions for every library.</p>
+</div>
+<div class="section" id="fast-local-installs">
+<h3>Fast &amp; Local Installs<a class="headerlink" href="#fast-local-installs" title="Permalink to this headline">¶</a></h3>
+<p>Often, you will want a fast install from local archives, without probing PyPI.</p>
+<p>First, download the archives that fulfill your requirements:</p>
+<div class="highlight-python"><pre>$ pip install --download &lt;DIR&gt; -r requirements.txt</pre>
+</div>
+<p>Then, install using –find-links and –no-index:</p>
+<div class="highlight-python"><pre>$ pip install --no-index --find-links=[file://]&lt;DIR&gt; -r requirements.txt</pre>
+</div>
+</div>
+<div class="section" id="downloading-archives">
+<h3>Downloading archives<a class="headerlink" href="#downloading-archives" title="Permalink to this headline">¶</a></h3>
+<p>pip allows you to just download the source archives for your requirements,
+without installing anything and without regard to what’s already installed.:</p>
+<div class="highlight-python"><pre>$ pip install --download &lt;DIR&gt; -r requirements.txt</pre>
+</div>
+<p>or, for a specific package:</p>
+<div class="highlight-python"><pre>$ pip install --download &lt;DIR&gt; SomePackage</pre>
+</div>
+</div>
+<div class="section" id="unpacking-archives">
+<h3>Unpacking archives<a class="headerlink" href="#unpacking-archives" title="Permalink to this headline">¶</a></h3>
+<p>pip allows you to just unpack archives to a build directory without installing
+them to site-packages. This can be useful to troubleshoot install errors or to
+inspect what is being installed.:</p>
+<div class="highlight-python"><pre>$ pip install --no-install SomePackage</pre>
+</div>
+<p>If you’re in a virtualenv, the build dir is &lt;virtualenv path&gt;/build. Otherwise,
+it’s <tt class="docutils literal"><span class="pre">&lt;OS</span> <span class="pre">temp</span> <span class="pre">dir&gt;/pip-build-&lt;username&gt;</span></tt></p>
+<p>Afterwards, to finish the job of installing unpacked archives, run:</p>
+<div class="highlight-python"><pre>$ pip install --no-download SomePackage</pre>
+</div>
+<p>Non-recursive upgrades:</p>
+<div class="highlight-python"><pre>pip install ---upgrade is currently written to perform a recursive upgrade.</pre>
+</div>
+<p>E.g. supposing:</p>
+<div class="highlight-python"><pre>SomePackage-1.0 requires AnotherPackage&gt;=1.0
+SomePackage-2.0 requires AnotherPackage&gt;=1.0 and OneMorePoject==1.0
+SomePackage-1.0 and AnotherPackage-1.0 are currently installed
+SomePackage-2.0 and AnotherPackage-2.0 are the latest versions available on PyPI.</pre>
+</div>
+<p>Running <tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">---upgrade</span> <span class="pre">SomePackage</span></tt> would upgrade SomePackage and
+AnotherPackage despite AnotherPackage already being satisfied.</p>
+<p>If you would like to perform a non-recursive upgrade perform these 2 steps:</p>
+<div class="highlight-python"><pre>pip install --upgrade --no-deps SomePackage
+pip install SomePackage</pre>
+</div>
+<p>The first line will upgrade SomePackage, but not dependencies like AnotherPackage.
+The 2nd line will fill in new dependencies like OneMorePackage.</p>
+</div>
+</div>
+<div class="section" id="tappolling">
+<h2>Tappolling<a class="headerlink" href="#tappolling" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="feature">
+<h3>Feature<a class="headerlink" href="#feature" title="Permalink to this headline">¶</a></h3>
+<p>Features for this application are:</p>
+<ul class="simple">
+<li>Create a poll question and multiple choice up to 8</li>
+<li>Allow member to post a comments</li>
+</ul>
+</div>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>As defined above run the command</p>
+<div class="highlight-python"><pre>$ pip install -r requirements.txt</pre>
+</div>
+<p>or use this command to install only django dependecies</p>
+<div class="highlight-python"><pre>$ pip install -r django_requirements.txt</pre>
+</div>
+<p>To Use this application add <tt class="docutils literal"><span class="pre">tappolling</span></tt> to INSTALLED_APPS in <tt class="docutils literal"><span class="pre">setting.py</span></tt></p>
+<div class="highlight-python"><pre>INSTALLED_APPS = (
+....
+'tappolling',
+)</pre>
+</div>
+<p>then synchronize the database</p>
+<div class="highlight-python"><pre>$ python manage.py syncdb</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tappolling User Guide</a><ul>
+<li><a class="reference internal" href="#pip-requirements-user-guide">PIP Requirements user guide</a><ul>
+<li><a class="reference internal" href="#requirements-files">Requirements Files</a></li>
+<li><a class="reference internal" href="#fast-local-installs">Fast &amp; Local Installs</a></li>
+<li><a class="reference internal" href="#downloading-archives">Downloading archives</a></li>
+<li><a class="reference internal" href="#unpacking-archives">Unpacking archives</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tappolling">Tappolling</a><ul>
+<li><a class="reference internal" href="#feature">Feature</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to tappolling&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tappolling.html"
+                        title="next chapter">tappolling Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tappolling_guide.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tappolling.html" title="tappolling Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to tappolling’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">tappolling 0.5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, firdan.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

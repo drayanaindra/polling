@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>polling.tests.test_models &mdash; polling 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="polling 0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="polling.tests" href="../tests.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../tests.html" accesskey="U">polling.tests</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for polling.tests.test_models</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">pdb</span>
+
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">timezone</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">polling.models</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">test_definitions</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="QuestionMethodTest"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.QuestionMethodTest">[docs]</a><span class="k">class</span> <span class="nc">QuestionMethodTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    
+    <span class="n">user</span><span class="o">=</span><span class="bp">None</span>
+    
+<div class="viewcode-block" id="QuestionMethodTest.setUp"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.QuestionMethodTest.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">create_user</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span><span class="s">&#39;pass&#39;</span><span class="p">)</span>
+        <span class="n">TestCase</span><span class="o">.</span><span class="n">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="QuestionMethodTest.test_change_title_to_slug_using_normal_title"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_using_normal_title">[docs]</a>    <span class="k">def</span> <span class="nf">test_change_title_to_slug_using_normal_title</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return the same as title &quot;&quot;&quot;</span> 
+        <span class="n">q</span> <span class="o">=</span> <span class="n">create_question</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span><span class="s">&#39;title&#39;</span><span class="p">,</span><span class="s">&#39;asfasdf&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span> <span class="s">&#39;title&#39;</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="QuestionMethodTest.test_change_title_to_slug_using_mixed_word_and_non_words"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_using_mixed_word_and_non_words">[docs]</a>    <span class="k">def</span> <span class="nf">test_change_title_to_slug_using_mixed_word_and_non_words</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return omitted non words and change it with &#39;-&#39; &quot;&quot;&quot;</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">create_question</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span><span class="s">&#39;title#^&amp;*^#$^ok&#39;</span><span class="p">,</span><span class="s">&#39;oke&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span> <span class="s">&#39;title-ok&#39;</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="QuestionMethodTest.test_change_title_to_slug_for_same_title_word_only"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_for_same_title_word_only">[docs]</a>    <span class="k">def</span> <span class="nf">test_change_title_to_slug_for_same_title_word_only</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns same as title with counted equal slug at the end &quot;&quot;&quot;</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">create_question</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span><span class="s">&#39;title&#39;</span><span class="p">)</span>
+        <span class="n">another_slug</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">change_title_to_slug</span><span class="p">(</span><span class="s">&quot;title&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">another_slug</span><span class="p">,</span><span class="s">&#39;title2&#39;</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="QuestionMethodTest.test_change_title_to_slug_for_mixed_words_and_non_words"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_for_mixed_words_and_non_words">[docs]</a>    <span class="k">def</span> <span class="nf">test_change_title_to_slug_for_mixed_words_and_non_words</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns same as title and omitted non words with counted equal slug at the end &quot;&quot;&quot;</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">create_question</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span><span class="s">&#39;title334(*&amp;#*(&amp;*(#@ok&#39;</span><span class="p">)</span>
+        <span class="n">another_slug</span><span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">change_title_to_slug</span><span class="p">(</span><span class="s">&#39;title334(*&amp;#*(&amp;*(#@ok&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">another_slug</span><span class="p">,</span><span class="s">&#39;title334-ok2&#39;</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="QuestionMethodTest.test_change_title_to_slug_for_first_mixed_second_not_mixed"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_for_first_mixed_second_not_mixed">[docs]</a>    <span class="k">def</span> <span class="nf">test_change_title_to_slug_for_first_mixed_second_not_mixed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns same as title and omitted non words with counted equal slug at the end &quot;&quot;&quot;</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">create_question</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span><span class="s">&#39;Hello ?&#39;</span><span class="p">)</span>
+        <span class="n">another_slug</span><span class="o">=</span><span class="n">q</span><span class="o">.</span><span class="n">change_title_to_slug</span><span class="p">(</span><span class="s">&#39;Hello&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">another_slug</span><span class="p">,</span> <span class="s">&#39;Hello2&#39;</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="QuestionMethodTest.test_change_title_to_slug_same_words_different_case"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_same_words_different_case">[docs]</a>    <span class="k">def</span> <span class="nf">test_change_title_to_slug_same_words_different_case</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return the same as title with counted equal slug at the end&quot;&quot;&quot;</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">create_question</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span><span class="s">&quot;Test&quot;</span><span class="p">)</span>
+        <span class="n">another_slug</span><span class="o">=</span><span class="n">q</span><span class="o">.</span><span class="n">change_title_to_slug</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">another_slug</span><span class="p">,</span><span class="s">&#39;test2&#39;</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="QuestionMethodTest.test__unicode__normal_string"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.QuestionMethodTest.test__unicode__normal_string">[docs]</a>    <span class="k">def</span> <span class="nf">test__unicode__normal_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return unicode string of the title &quot;&quot;&quot;</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">create_question</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span><span class="s">&quot;test&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">__unicode__</span><span class="p">(),</span> <span class="s">u&#39;test&#39;</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="QuestionMethodTest.test__unicode__mixed_string"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.QuestionMethodTest.test__unicode__mixed_string">[docs]</a>    <span class="k">def</span> <span class="nf">test__unicode__mixed_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return unicode string of the title &quot;&quot;&quot;</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">create_question</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span><span class="s">&quot;test123?&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">__unicode__</span><span class="p">(),</span> <span class="s">u&#39;test123?&#39;</span><span class="p">)</span>
+        </div></div>
+<div class="viewcode-block" id="ChoiceMethods"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.ChoiceMethods">[docs]</a><span class="k">class</span> <span class="nc">ChoiceMethods</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    
+    <span class="n">question</span><span class="o">=</span><span class="bp">None</span>
+    
+<div class="viewcode-block" id="ChoiceMethods.setUp"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.ChoiceMethods.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">create_user</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span><span class="s">&#39;pass&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">question</span> <span class="o">=</span> <span class="n">create_question</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+        <span class="n">TestCase</span><span class="o">.</span><span class="n">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="ChoiceMethods.test__unicode__normal_string"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.ChoiceMethods.test__unicode__normal_string">[docs]</a>    <span class="k">def</span> <span class="nf">test__unicode__normal_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">create_choices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">question</span><span class="p">,</span><span class="s">&#39;text&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">__unicode__</span><span class="p">(),</span> <span class="s">u&#39;test - text&#39;</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="ChoiceMethods.test__unicode__mixed_string"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.ChoiceMethods.test__unicode__mixed_string">[docs]</a>    <span class="k">def</span> <span class="nf">test__unicode__mixed_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">create_choices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">question</span><span class="p">,</span><span class="s">&#39;text ?&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">__unicode__</span><span class="p">(),</span> <span class="s">u&#39;test - text ?&#39;</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="ChoiceMethods.test_update_total_votes_1_times"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.ChoiceMethods.test_update_total_votes_1_times">[docs]</a>    <span class="k">def</span> <span class="nf">test_update_total_votes_1_times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">create_choices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">question</span><span class="p">,</span><span class="s">&#39;One&#39;</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">Choice</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;One&quot;</span><span class="p">)</span>
+        <span class="c"># updating 1 times</span>
+        <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">update_total_votes</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">total_votes</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="s">&quot;fail on 1&quot;</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="ChoiceMethods.test_update_total_votes_99_times"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.ChoiceMethods.test_update_total_votes_99_times">[docs]</a>    <span class="k">def</span> <span class="nf">test_update_total_votes_99_times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">create_choices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">question</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">Choice</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;test&quot;</span><span class="p">)</span>
+        <span class="c"># updating 99 times</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span> <span class="p">:</span>
+            <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">update_total_votes</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">total_votes</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span><span class="s">&quot;fail on 99&quot;</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="ChoiceMethods.test_update_total_votes_300_times"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.ChoiceMethods.test_update_total_votes_300_times">[docs]</a>    <span class="k">def</span> <span class="nf">test_update_total_votes_300_times</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">create_choices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">question</span><span class="p">,</span><span class="s">&#39;this is sparta!!!&#39;</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">Choice</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">&quot;this is sparta!!!&quot;</span><span class="p">)</span>
+        
+        <span class="c"># updating 300 times</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span> <span class="p">:</span>
+            <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">update_total_votes</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">total_votes</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span><span class="s">&quot;fail on 300&quot;</span><span class="p">)</span>
+        </div></div>
+<div class="viewcode-block" id="AnswerMethods"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.AnswerMethods">[docs]</a><span class="k">class</span> <span class="nc">AnswerMethods</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    
+    <span class="n">user</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">question</span> <span class="o">=</span> <span class="bp">None</span>
+    
+<div class="viewcode-block" id="AnswerMethods.setUp"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.AnswerMethods.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">create_user</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span><span class="s">&#39;pass&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">question</span> <span class="o">=</span> <span class="n">create_question</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+        <span class="n">TestCase</span><span class="o">.</span><span class="n">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="AnswerMethods.test__unicode__normal_string"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.AnswerMethods.test__unicode__normal_string">[docs]</a>    <span class="k">def</span> <span class="nf">test__unicode__normal_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">create_answer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">question</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        
+        <span class="n">rformat</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%d</span><span class="s">/%m/%Y %H:%M&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">__unicode__</span><span class="p">(),</span> <span class="s">u&quot;user answered test on &quot;</span><span class="o">+</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">rformat</span><span class="p">))</span>
+        </div></div>
+<div class="viewcode-block" id="PollManagerMethod"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.PollManagerMethod">[docs]</a><span class="k">class</span> <span class="nc">PollManagerMethod</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="bp">None</span>
+<div class="viewcode-block" id="PollManagerMethod.setUp"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.PollManagerMethod.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">create_user</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&quot;user&quot;</span><span class="p">,</span><span class="n">password</span><span class="o">=</span><span class="s">&quot;pass&quot;</span><span class="p">)</span>
+<span class="c">#         create_question(user,&#39;test&#39;);</span>
+        </div>
+<div class="viewcode-block" id="PollManagerMethod.test_total_poll_count"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.PollManagerMethod.test_total_poll_count">[docs]</a>    <span class="k">def</span> <span class="nf">test_total_poll_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">populate_poll</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">total_poll_count</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        
+        <span class="n">populate_poll</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">total_poll_count</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="c"># total 30 because first: 10, second: 20</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+        
+        </div></div>
+<div class="viewcode-block" id="QuestionModelTest"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.QuestionModelTest">[docs]</a><span class="k">class</span> <span class="nc">QuestionModelTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    test case for Question model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="QuestionModelTest.create_question"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.QuestionModelTest.create_question">[docs]</a>    <span class="k">def</span> <span class="nf">create_question</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;selamat&quot;</span><span class="p">,</span> <span class="n">slug</span><span class="o">=</span><span class="s">&quot;selamat&quot;</span><span class="p">,</span> <span class="n">created_by_id</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">,</span> <span class="n">created_by_id</span><span class="o">=</span><span class="n">created_by_id</span><span class="p">,</span> <span class="n">created_on</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+</div>
+<div class="viewcode-block" id="QuestionModelTest.test_question_create"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_models.QuestionModelTest.test_question_create">[docs]</a>    <span class="k">def</span> <span class="nf">test_question_create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_question</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">Question</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">__unicode__</span><span class="p">(),</span> <span class="n">w</span><span class="o">.</span><span class="n">title</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../tests.html" >polling.tests</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, firdan.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

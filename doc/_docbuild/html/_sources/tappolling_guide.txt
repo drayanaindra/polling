@@ -1,0 +1,136 @@
+*********************
+Tappolling User Guide
+*********************
+
+This application purpose is to create an interactive polling. 
+
+PIP Requirements user guide
+===========================
+
+as it is necessary to install the requirements to prevent unnecessary server 
+error, below are the guide to how to install the requirements.
+
+Requirements Files
+------------------
+A key idea in ``pip`` is that package versions listed in requirement files 
+(or as ``pip`` install arguments), have precedence over those that are located during 
+the normal dependency resolution process that uses “install_requires” metadata.
+
+This allows users to be in control of specifying an environment of packages that
+are known to work together.
+
+Instead of running something like ``pip install MyApp`` and getting whatever 
+libraries come along, you’d run ``pip install -r requirements.txt`` 
+where “requirements.txt” contains something like::
+
+	MyApp
+	Framework==0.9.4
+	Library>=0.2
+
+Regardless of what MyApp lists in ``setup.py``, you’ll get a specific 
+version of Framework (0.9.4) and at least the 0.2 version of Library. 
+Additionally, you can add optional libraries and support tools that MyApp 
+doesn’t strictly require, giving people a set of recommended libraries.
+
+
+To create a new requirements file from a known working environment, use::
+
+	$ pip freeze > stable-req.txt
+
+This will write a listing of all installed libraries to stable-req.txt 
+with exact versions for every library.
+
+
+Fast & Local Installs
+---------------------
+Often, you will want a fast install from local archives, without probing PyPI.
+
+First, download the archives that fulfill your requirements::
+
+	$ pip install --download <DIR> -r requirements.txt
+
+Then, install using –find-links and –no-index::
+
+	$ pip install --no-index --find-links=[file://]<DIR> -r requirements.txt
+
+
+Downloading archives
+--------------------
+pip allows you to just download the source archives for your requirements, 
+without installing anything and without regard to what’s already installed.::
+
+	$ pip install --download <DIR> -r requirements.txt
+
+or, for a specific package::
+
+	$ pip install --download <DIR> SomePackage
+
+
+Unpacking archives
+------------------
+pip allows you to just unpack archives to a build directory without installing 
+them to site-packages. This can be useful to troubleshoot install errors or to 
+inspect what is being installed.::
+
+	$ pip install --no-install SomePackage
+
+If you’re in a virtualenv, the build dir is <virtualenv path>/build. Otherwise, 
+it’s ``<OS temp dir>/pip-build-<username>``
+
+Afterwards, to finish the job of installing unpacked archives, run::
+
+	$ pip install --no-download SomePackage
+
+Non-recursive upgrades::
+
+	pip install ---upgrade is currently written to perform a recursive upgrade.
+
+E.g. supposing::
+
+    SomePackage-1.0 requires AnotherPackage>=1.0
+    SomePackage-2.0 requires AnotherPackage>=1.0 and OneMorePoject==1.0
+    SomePackage-1.0 and AnotherPackage-1.0 are currently installed
+    SomePackage-2.0 and AnotherPackage-2.0 are the latest versions available on PyPI.
+
+Running ``pip install ---upgrade SomePackage`` would upgrade SomePackage and 
+AnotherPackage despite AnotherPackage already being satisfied.
+
+If you would like to perform a non-recursive upgrade perform these 2 steps: ::
+
+	pip install --upgrade --no-deps SomePackage
+	pip install SomePackage
+
+The first line will upgrade SomePackage, but not dependencies like AnotherPackage. 
+The 2nd line will fill in new dependencies like OneMorePackage.
+
+Tappolling 
+==========
+
+Feature
+-------
+
+Features for this application are:
+
+* Create a poll question and multiple choice up to 8
+* Allow member to post a comments
+
+Installation
+-----------------
+As defined above run the command ::
+
+	$ pip install -r requirements.txt
+	
+or use this command to install only django dependecies ::
+	
+	$ pip install -r django_requirements.txt
+
+To Use this application add ``tappolling`` to INSTALLED_APPS in ``setting.py`` ::
+
+	INSTALLED_APPS = (
+	....
+	'tappolling',
+	)
+
+then synchronize the database ::
+
+	$ python manage.py syncdb

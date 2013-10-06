@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>polling.tests.test_forms &mdash; polling 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="polling 0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="polling.tests" href="../tests.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../tests.html" accesskey="U">polling.tests</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for polling.tests.test_forms</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">pdb</span>
+
+<span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="kn">from</span> <span class="nn">polling.models</span> <span class="kn">import</span> <span class="n">Question</span><span class="p">,</span> <span class="n">Choice</span>
+<span class="kn">from</span> <span class="nn">test_definitions</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="CreatePollQuestionFormTest"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_forms.CreatePollQuestionFormTest">[docs]</a><span class="k">class</span> <span class="nc">CreatePollQuestionFormTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    
+<div class="viewcode-block" id="CreatePollQuestionFormTest.test_for_error_choice_less_than_two"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_forms.CreatePollQuestionFormTest.test_for_error_choice_less_than_two">[docs]</a>    <span class="k">def</span> <span class="nf">test_for_error_choice_less_than_two</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">create_dummy_form</span><span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">,</span> <span class="s">&quot;test&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">())</span>
+    </div>
+<div class="viewcode-block" id="CreatePollQuestionFormTest.test_all_values_are_inputed"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_forms.CreatePollQuestionFormTest.test_all_values_are_inputed">[docs]</a>    <span class="k">def</span> <span class="nf">test_all_values_are_inputed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">create_dummy_form</span><span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">,</span><span class="s">&quot;test&quot;</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">(),</span>                                
+                        <span class="s">&quot;form show an false result on all values are correct&quot;</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="CreatePollQuestionFormTest.test_values_inputed_choice_more_than_two_less_than_max"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_forms.CreatePollQuestionFormTest.test_values_inputed_choice_more_than_two_less_than_max">[docs]</a>    <span class="k">def</span> <span class="nf">test_values_inputed_choice_more_than_two_less_than_max</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">create_dummy_form</span><span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">,</span><span class="s">&quot;test&quot;</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">())</span>
+    </div>
+<div class="viewcode-block" id="CreatePollQuestionFormTest.test_values_inputed_two_choices_on_random"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_forms.CreatePollQuestionFormTest.test_values_inputed_two_choices_on_random">[docs]</a>    <span class="k">def</span> <span class="nf">test_values_inputed_two_choices_on_random</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">create_dummy_form</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">())</span>
+    </div>
+<div class="viewcode-block" id="CreatePollQuestionFormTest.test_input_without_title"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_title">[docs]</a>    <span class="k">def</span> <span class="nf">test_input_without_title</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">create_dummy_form</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">())</span>
+    </div>
+<div class="viewcode-block" id="CreatePollQuestionFormTest.test_input_without_text"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_text">[docs]</a>    <span class="k">def</span> <span class="nf">test_input_without_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">create_dummy_form</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">())</span>  
+        </div>
+<div class="viewcode-block" id="CreatePollQuestionFormTest.test_input_without_choice_1"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_choice_1">[docs]</a>    <span class="k">def</span> <span class="nf">test_input_without_choice_1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">create_dummy_form</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">())</span>
+          </div>
+<div class="viewcode-block" id="CreatePollQuestionFormTest.test_input_without_choice_2"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_choice_2">[docs]</a>    <span class="k">def</span> <span class="nf">test_input_without_choice_2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">create_dummy_form</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span><span class="bp">None</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">())</span>
+        </div>
+<div class="viewcode-block" id="CreatePollQuestionFormTest.test_input_without_extra_choice"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_extra_choice">[docs]</a>    <span class="k">def</span> <span class="nf">test_input_without_extra_choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">create_dummy_form</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">())</span>
+    </div>
+<div class="viewcode-block" id="CreatePollQuestionFormTest.test_input_without_required_choice"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_required_choice">[docs]</a>    <span class="k">def</span> <span class="nf">test_input_without_required_choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">create_dummy_form</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">,[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">())</span>
+    </div>
+<div class="viewcode-block" id="CreatePollQuestionFormTest.test_form_save_method_using_only_required_method"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_forms.CreatePollQuestionFormTest.test_form_save_method_using_only_required_method">[docs]</a>    <span class="k">def</span> <span class="nf">test_form_save_method_using_only_required_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="bp">None</span>
+        
+        <span class="n">test</span> <span class="o">=</span> <span class="n">create_dummy_form</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">create_user</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span><span class="s">&#39;pass&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">())</span>
+        
+        <span class="k">if</span> <span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">Question</span><span class="p">))</span>
+        <span class="c"># count choices created </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">Choice</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span><span class="mi">2</span><span class="p">,</span><span class="s">&quot;fail on total choices&quot;</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="CreatePollQuestionFormTest.test_form_save_method_using_extra_choices"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_forms.CreatePollQuestionFormTest.test_form_save_method_using_extra_choices">[docs]</a>    <span class="k">def</span> <span class="nf">test_form_save_method_using_extra_choices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="bp">None</span>
+        
+        <span class="n">test</span> <span class="o">=</span> <span class="n">create_dummy_form</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">create_user</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span><span class="s">&#39;pass&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">())</span>
+        
+        <span class="k">if</span> <span class="n">test</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">Question</span><span class="p">))</span>
+        <span class="c"># count choices created</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">Choice</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span><span class="mi">5</span><span class="p">,</span><span class="s">&quot;fail on total choices&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../tests.html" >polling.tests</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, firdan.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

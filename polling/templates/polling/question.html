@@ -1,0 +1,56 @@
+{% extends "polling/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+    <ul class="media-list">
+      <h3 class="set2">{{ question.title|capfirst }}</h3>
+      <span class="muted">{{ question.created_on|timesince }} ago</span>
+      <form action="" method="post" name='form1'>            
+        {% csrf_token %}
+        <fieldset>
+          <div class="div-row clearfix">
+            <p class="news-line-pad">
+              <span>{{ question.text }}</span>
+            </p>                
+          </div>
+          <div id="ValidationError">
+            {% if error %}
+            <div class='alert alert-dismissable alert-warning'>
+              <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+              {{error}}
+            </div>
+            {% endif %}
+          </div>
+          <div class="span7 clearfix">
+              {% for choice in choices %}
+                  <label class="radio">
+                      <input type="radio" name="choices" value="{{ choice.id }}"/> {{ choice.text }}
+                  </label>
+              {% endfor %}
+          </div>
+        </fieldset>
+        <div>
+          <button type="submit" class="btn btn-nu-orange" style="margin-top: 10px;">{% trans "Answer Poll" %}</button>
+        </div>
+      </form>
+    </ul>
+</div>
+{% endblock content%}
+
+
+{% block scripts %}
+<script type="text/javascript">
+
+    $("form[name='form1']").submit(function () {
+        if (!$("input[name='choices']:checked").val()) {
+            document.getElementById('ValidationError').innerHTML = "<div class='alert alert-dismissable alert-warning'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>You need to pick an answer.</div>";
+            return false; 
+        }
+        else {
+            return true;
+        }
+    });
+
+</script>
+{% endblock scripts%}

@@ -1,0 +1,559 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tests Package &mdash; polling 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="polling 0.1 documentation" href="index.html" />
+    <link rel="up" title="Polling Package" href="polling.html" />
+    <link rel="prev" title="templatetags Package" href="polling.templatetags.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="polling.templatetags.html" title="templatetags Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="polling.html" accesskey="U">Polling Package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tests-package">
+<h1>tests Package<a class="headerlink" href="#tests-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">tests</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-polling.tests"></span><dl class="function">
+<dt id="polling.tests.suite">
+<tt class="descclassname">polling.tests.</tt><tt class="descname">suite</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests.html#suite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.suite" title="Permalink to this definition">¶</a></dt>
+<dd><p>automatically detect folder</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-polling.tests.test_definitions">
+<span id="test-definitions-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">test_definitions</span></tt> Module<a class="headerlink" href="#module-polling.tests.test_definitions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="polling.tests.test_definitions.create_answer">
+<tt class="descclassname">polling.tests.test_definitions.</tt><tt class="descname">create_answer</tt><big>(</big><em>question</em>, <em>user</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_definitions.html#create_answer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_definitions.create_answer" title="Permalink to this definition">¶</a></dt>
+<dd><p>create data that use Answer model</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="polling.tests.test_definitions.create_choices">
+<tt class="descclassname">polling.tests.test_definitions.</tt><tt class="descname">create_choices</tt><big>(</big><em>question_model</em>, <em>text='text'</em>, <em>total_votes=0</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_definitions.html#create_choices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_definitions.create_choices" title="Permalink to this definition">¶</a></dt>
+<dd><p>create data that use Choice model</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="polling.tests.test_definitions.create_dummy_form">
+<tt class="descclassname">polling.tests.test_definitions.</tt><tt class="descname">create_dummy_form</tt><big>(</big><em>title</em>, <em>text</em>, <em>fill_choice=</em><span class="optional">[</span><span class="optional">]</span>, <em>choice_length=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="_modules/polling/tests/test_definitions.html#create_dummy_form"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_definitions.create_dummy_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>create CreatePollQuestion dummy form</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>title</strong> (<em>string</em>) &#8211; the title to put on question_title</li>
+<li><strong>text</strong> (<em>string</em>) &#8211; text to put on question_description</li>
+<li><strong>fill_choice</strong> &#8211; choices to fill with a dummy text</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="polling.tests.test_definitions.create_question">
+<tt class="descclassname">polling.tests.test_definitions.</tt><tt class="descname">create_question</tt><big>(</big><em>user</em>, <em>title='title'</em>, <em>text='text'</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_definitions.html#create_question"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_definitions.create_question" title="Permalink to this definition">¶</a></dt>
+<dd><p>create data that use Question model</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="polling.tests.test_definitions.create_random_string">
+<tt class="descclassname">polling.tests.test_definitions.</tt><tt class="descname">create_random_string</tt><big>(</big><em>total_character</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_definitions.html#create_random_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_definitions.create_random_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>create random string using string.printable</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>total_character</strong> (<em>integer</em>) &#8211; how long the string will be</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="polling.tests.test_definitions.create_random_user">
+<tt class="descclassname">polling.tests.test_definitions.</tt><tt class="descname">create_random_user</tt><big>(</big><em>total</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_definitions.html#create_random_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_definitions.create_random_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="polling.tests.test_definitions.create_user">
+<tt class="descclassname">polling.tests.test_definitions.</tt><tt class="descname">create_user</tt><big>(</big><em>username</em>, <em>password</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_definitions.html#create_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_definitions.create_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>create user for testing</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="polling.tests.test_definitions.create_user_using_manager">
+<tt class="descclassname">polling.tests.test_definitions.</tt><tt class="descname">create_user_using_manager</tt><big>(</big><em>username</em>, <em>password</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_definitions.html#create_user_using_manager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_definitions.create_user_using_manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>same as create_user but using user manager</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="polling.tests.test_definitions.populate_poll">
+<tt class="descclassname">polling.tests.test_definitions.</tt><tt class="descname">populate_poll</tt><big>(</big><em>user=''</em>, <em>total=10</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_definitions.html#populate_poll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_definitions.populate_poll" title="Permalink to this definition">¶</a></dt>
+<dd><p>populate question object with random string and user</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>user</strong> &#8211; user object</li>
+<li><strong>total</strong> &#8211; an integer to describe how many data to be made</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="polling.tests.test_definitions.seed_random">
+<tt class="descclassname">polling.tests.test_definitions.</tt><tt class="descname">seed_random</tt><big>(</big><em>max_integer</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_definitions.html#seed_random"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_definitions.seed_random" title="Permalink to this definition">¶</a></dt>
+<dd><p>give random value between 0 ~ max</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-polling.tests.test_forms">
+<span id="test-forms-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">test_forms</span></tt> Module<a class="headerlink" href="#module-polling.tests.test_forms" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="polling.tests.test_forms.CreatePollQuestionFormTest">
+<em class="property">class </em><tt class="descclassname">polling.tests.test_forms.</tt><tt class="descname">CreatePollQuestionFormTest</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_forms.html#CreatePollQuestionFormTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_forms.CreatePollQuestionFormTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">django.test.testcases.TestCase</span></tt></p>
+<dl class="method">
+<dt id="polling.tests.test_forms.CreatePollQuestionFormTest.test_all_values_are_inputed">
+<tt class="descname">test_all_values_are_inputed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_forms.html#CreatePollQuestionFormTest.test_all_values_are_inputed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_forms.CreatePollQuestionFormTest.test_all_values_are_inputed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_forms.CreatePollQuestionFormTest.test_for_error_choice_less_than_two">
+<tt class="descname">test_for_error_choice_less_than_two</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_forms.html#CreatePollQuestionFormTest.test_for_error_choice_less_than_two"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_forms.CreatePollQuestionFormTest.test_for_error_choice_less_than_two" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_forms.CreatePollQuestionFormTest.test_form_save_method_using_extra_choices">
+<tt class="descname">test_form_save_method_using_extra_choices</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_forms.html#CreatePollQuestionFormTest.test_form_save_method_using_extra_choices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_forms.CreatePollQuestionFormTest.test_form_save_method_using_extra_choices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_forms.CreatePollQuestionFormTest.test_form_save_method_using_only_required_method">
+<tt class="descname">test_form_save_method_using_only_required_method</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_forms.html#CreatePollQuestionFormTest.test_form_save_method_using_only_required_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_forms.CreatePollQuestionFormTest.test_form_save_method_using_only_required_method" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_forms.CreatePollQuestionFormTest.test_input_with_150_string_on_extra_choice">
+<tt class="descname">test_input_with_150_string_on_extra_choice</tt><big>(</big><big>)</big><a class="headerlink" href="#polling.tests.test_forms.CreatePollQuestionFormTest.test_input_with_150_string_on_extra_choice" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_forms.CreatePollQuestionFormTest.test_input_with_150_string_on_required_choice">
+<tt class="descname">test_input_with_150_string_on_required_choice</tt><big>(</big><big>)</big><a class="headerlink" href="#polling.tests.test_forms.CreatePollQuestionFormTest.test_input_with_150_string_on_required_choice" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_choice_1">
+<tt class="descname">test_input_without_choice_1</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_forms.html#CreatePollQuestionFormTest.test_input_without_choice_1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_choice_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_choice_2">
+<tt class="descname">test_input_without_choice_2</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_forms.html#CreatePollQuestionFormTest.test_input_without_choice_2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_choice_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_extra_choice">
+<tt class="descname">test_input_without_extra_choice</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_forms.html#CreatePollQuestionFormTest.test_input_without_extra_choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_extra_choice" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_required_choice">
+<tt class="descname">test_input_without_required_choice</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_forms.html#CreatePollQuestionFormTest.test_input_without_required_choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_required_choice" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_text">
+<tt class="descname">test_input_without_text</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_forms.html#CreatePollQuestionFormTest.test_input_without_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_title">
+<tt class="descname">test_input_without_title</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_forms.html#CreatePollQuestionFormTest.test_input_without_title"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_forms.CreatePollQuestionFormTest.test_input_without_title" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_forms.CreatePollQuestionFormTest.test_values_inputed_choice_more_than_two_less_than_max">
+<tt class="descname">test_values_inputed_choice_more_than_two_less_than_max</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_forms.html#CreatePollQuestionFormTest.test_values_inputed_choice_more_than_two_less_than_max"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_forms.CreatePollQuestionFormTest.test_values_inputed_choice_more_than_two_less_than_max" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_forms.CreatePollQuestionFormTest.test_values_inputed_two_choices_on_random">
+<tt class="descname">test_values_inputed_two_choices_on_random</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_forms.html#CreatePollQuestionFormTest.test_values_inputed_two_choices_on_random"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_forms.CreatePollQuestionFormTest.test_values_inputed_two_choices_on_random" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-polling.tests.test_models">
+<span id="test-models-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">test_models</span></tt> Module<a class="headerlink" href="#module-polling.tests.test_models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="polling.tests.test_models.AnswerMethods">
+<em class="property">class </em><tt class="descclassname">polling.tests.test_models.</tt><tt class="descname">AnswerMethods</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#AnswerMethods"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.AnswerMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">django.test.testcases.TestCase</span></tt></p>
+<dl class="attribute">
+<dt id="polling.tests.test_models.AnswerMethods.question">
+<tt class="descname">question</tt><em class="property"> = None</em><a class="headerlink" href="#polling.tests.test_models.AnswerMethods.question" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.AnswerMethods.setUp">
+<tt class="descname">setUp</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#AnswerMethods.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.AnswerMethods.setUp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.AnswerMethods.test__unicode__normal_string">
+<tt class="descname">test__unicode__normal_string</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#AnswerMethods.test__unicode__normal_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.AnswerMethods.test__unicode__normal_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polling.tests.test_models.AnswerMethods.user">
+<tt class="descname">user</tt><em class="property"> = None</em><a class="headerlink" href="#polling.tests.test_models.AnswerMethods.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polling.tests.test_models.ChoiceMethods">
+<em class="property">class </em><tt class="descclassname">polling.tests.test_models.</tt><tt class="descname">ChoiceMethods</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#ChoiceMethods"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.ChoiceMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">django.test.testcases.TestCase</span></tt></p>
+<dl class="attribute">
+<dt id="polling.tests.test_models.ChoiceMethods.question">
+<tt class="descname">question</tt><em class="property"> = None</em><a class="headerlink" href="#polling.tests.test_models.ChoiceMethods.question" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.ChoiceMethods.setUp">
+<tt class="descname">setUp</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#ChoiceMethods.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.ChoiceMethods.setUp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.ChoiceMethods.test__unicode__mixed_string">
+<tt class="descname">test__unicode__mixed_string</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#ChoiceMethods.test__unicode__mixed_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.ChoiceMethods.test__unicode__mixed_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.ChoiceMethods.test__unicode__normal_string">
+<tt class="descname">test__unicode__normal_string</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#ChoiceMethods.test__unicode__normal_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.ChoiceMethods.test__unicode__normal_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.ChoiceMethods.test_update_total_votes_1_times">
+<tt class="descname">test_update_total_votes_1_times</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#ChoiceMethods.test_update_total_votes_1_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.ChoiceMethods.test_update_total_votes_1_times" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.ChoiceMethods.test_update_total_votes_300_times">
+<tt class="descname">test_update_total_votes_300_times</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#ChoiceMethods.test_update_total_votes_300_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.ChoiceMethods.test_update_total_votes_300_times" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.ChoiceMethods.test_update_total_votes_99_times">
+<tt class="descname">test_update_total_votes_99_times</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#ChoiceMethods.test_update_total_votes_99_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.ChoiceMethods.test_update_total_votes_99_times" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polling.tests.test_models.PollManagerMethod">
+<em class="property">class </em><tt class="descclassname">polling.tests.test_models.</tt><tt class="descname">PollManagerMethod</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#PollManagerMethod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.PollManagerMethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">django.test.testcases.TestCase</span></tt></p>
+<dl class="method">
+<dt id="polling.tests.test_models.PollManagerMethod.setUp">
+<tt class="descname">setUp</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#PollManagerMethod.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.PollManagerMethod.setUp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.PollManagerMethod.test_total_poll_count">
+<tt class="descname">test_total_poll_count</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#PollManagerMethod.test_total_poll_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.PollManagerMethod.test_total_poll_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polling.tests.test_models.PollManagerMethod.user">
+<tt class="descname">user</tt><em class="property"> = None</em><a class="headerlink" href="#polling.tests.test_models.PollManagerMethod.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polling.tests.test_models.QuestionMethodTest">
+<em class="property">class </em><tt class="descclassname">polling.tests.test_models.</tt><tt class="descname">QuestionMethodTest</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#QuestionMethodTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.QuestionMethodTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">django.test.testcases.TestCase</span></tt></p>
+<dl class="method">
+<dt id="polling.tests.test_models.QuestionMethodTest.setUp">
+<tt class="descname">setUp</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#QuestionMethodTest.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.QuestionMethodTest.setUp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.QuestionMethodTest.test__unicode__mixed_string">
+<tt class="descname">test__unicode__mixed_string</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#QuestionMethodTest.test__unicode__mixed_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.QuestionMethodTest.test__unicode__mixed_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return unicode string of the title</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.QuestionMethodTest.test__unicode__normal_string">
+<tt class="descname">test__unicode__normal_string</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#QuestionMethodTest.test__unicode__normal_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.QuestionMethodTest.test__unicode__normal_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return unicode string of the title</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_for_first_mixed_second_not_mixed">
+<tt class="descname">test_change_title_to_slug_for_first_mixed_second_not_mixed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#QuestionMethodTest.test_change_title_to_slug_for_first_mixed_second_not_mixed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_for_first_mixed_second_not_mixed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns same as title and omitted non words with counted equal slug at the end</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_for_mixed_words_and_non_words">
+<tt class="descname">test_change_title_to_slug_for_mixed_words_and_non_words</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#QuestionMethodTest.test_change_title_to_slug_for_mixed_words_and_non_words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_for_mixed_words_and_non_words" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns same as title and omitted non words with counted equal slug at the end</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_for_same_title_word_only">
+<tt class="descname">test_change_title_to_slug_for_same_title_word_only</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#QuestionMethodTest.test_change_title_to_slug_for_same_title_word_only"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_for_same_title_word_only" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns same as title with counted equal slug at the end</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_same_words_different_case">
+<tt class="descname">test_change_title_to_slug_same_words_different_case</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#QuestionMethodTest.test_change_title_to_slug_same_words_different_case"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_same_words_different_case" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the same as title with counted equal slug at the end</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_using_mixed_word_and_non_words">
+<tt class="descname">test_change_title_to_slug_using_mixed_word_and_non_words</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#QuestionMethodTest.test_change_title_to_slug_using_mixed_word_and_non_words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_using_mixed_word_and_non_words" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return omitted non words and change it with &#8216;-&#8216;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_using_normal_title">
+<tt class="descname">test_change_title_to_slug_using_normal_title</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#QuestionMethodTest.test_change_title_to_slug_using_normal_title"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.QuestionMethodTest.test_change_title_to_slug_using_normal_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the same as title</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polling.tests.test_models.QuestionMethodTest.user">
+<tt class="descname">user</tt><em class="property"> = None</em><a class="headerlink" href="#polling.tests.test_models.QuestionMethodTest.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polling.tests.test_models.QuestionModelTest">
+<em class="property">class </em><tt class="descclassname">polling.tests.test_models.</tt><tt class="descname">QuestionModelTest</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#QuestionModelTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.QuestionModelTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">django.test.testcases.TestCase</span></tt></p>
+<p>test case for Question model</p>
+<dl class="method">
+<dt id="polling.tests.test_models.QuestionModelTest.create_question">
+<tt class="descname">create_question</tt><big>(</big><em>title='selamat'</em>, <em>slug='selamat'</em>, <em>created_by_id=1</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#QuestionModelTest.create_question"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.QuestionModelTest.create_question" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_models.QuestionModelTest.test_question_create">
+<tt class="descname">test_question_create</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_models.html#QuestionModelTest.test_question_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_models.QuestionModelTest.test_question_create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-polling.tests.test_views">
+<span id="test-views-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">test_views</span></tt> Module<a class="headerlink" href="#module-polling.tests.test_views" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="polling.tests.test_views.CreatePollViewTest">
+<em class="property">class </em><tt class="descclassname">polling.tests.test_views.</tt><tt class="descname">CreatePollViewTest</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_views.html#CreatePollViewTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_views.CreatePollViewTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">django.test.testcases.TestCase</span></tt></p>
+<dl class="method">
+<dt id="polling.tests.test_views.CreatePollViewTest.setUp">
+<tt class="descname">setUp</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_views.html#CreatePollViewTest.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_views.CreatePollViewTest.setUp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_views.CreatePollViewTest.test_call_create_when_auth">
+<tt class="descname">test_call_create_when_auth</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_views.html#CreatePollViewTest.test_call_create_when_auth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_views.CreatePollViewTest.test_call_create_when_auth" title="Permalink to this definition">¶</a></dt>
+<dd><p>show status_code 200 and goto create page</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_views.CreatePollViewTest.test_call_redirected_when_calling_create_with_unauth_login">
+<tt class="descname">test_call_redirected_when_calling_create_with_unauth_login</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_views.html#CreatePollViewTest.test_call_redirected_when_calling_create_with_unauth_login"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_views.CreatePollViewTest.test_call_redirected_when_calling_create_with_unauth_login" title="Permalink to this definition">¶</a></dt>
+<dd><p>TestCase for view polling list with auth user login
+should redirected to login page</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_views.CreatePollViewTest.test_form_valid">
+<tt class="descname">test_form_valid</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_views.html#CreatePollViewTest.test_form_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_views.CreatePollViewTest.test_form_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polling.tests.test_views.DeletePollViewTest">
+<em class="property">class </em><tt class="descclassname">polling.tests.test_views.</tt><tt class="descname">DeletePollViewTest</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_views.html#DeletePollViewTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_views.DeletePollViewTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">django.test.testcases.TestCase</span></tt></p>
+<dl class="method">
+<dt id="polling.tests.test_views.DeletePollViewTest.setUp">
+<tt class="descname">setUp</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_views.html#DeletePollViewTest.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_views.DeletePollViewTest.setUp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_views.DeletePollViewTest.test_delete_from_auth_and_owner">
+<tt class="descname">test_delete_from_auth_and_owner</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_views.html#DeletePollViewTest.test_delete_from_auth_and_owner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_views.DeletePollViewTest.test_delete_from_auth_and_owner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_views.DeletePollViewTest.test_delete_from_auth_not_owner">
+<tt class="descname">test_delete_from_auth_not_owner</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_views.html#DeletePollViewTest.test_delete_from_auth_not_owner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_views.DeletePollViewTest.test_delete_from_auth_not_owner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_views.DeletePollViewTest.test_delete_on_not_exist">
+<tt class="descname">test_delete_on_not_exist</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_views.html#DeletePollViewTest.test_delete_on_not_exist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_views.DeletePollViewTest.test_delete_on_not_exist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polling.tests.test_views.QuestionViewTest">
+<em class="property">class </em><tt class="descclassname">polling.tests.test_views.</tt><tt class="descname">QuestionViewTest</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/polling/tests/test_views.html#QuestionViewTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_views.QuestionViewTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">django.test.testcases.TestCase</span></tt></p>
+<dl class="method">
+<dt id="polling.tests.test_views.QuestionViewTest.setUp">
+<tt class="descname">setUp</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_views.html#QuestionViewTest.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_views.QuestionViewTest.setUp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_views.QuestionViewTest.test_call_question_list_anonymous">
+<tt class="descname">test_call_question_list_anonymous</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_views.html#QuestionViewTest.test_call_question_list_anonymous"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_views.QuestionViewTest.test_call_question_list_anonymous" title="Permalink to this definition">¶</a></dt>
+<dd><p>TestCase for view polling list if not auth user login
+should display question list page</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polling.tests.test_views.QuestionViewTest.test_call_question_list_with_auth_user">
+<tt class="descname">test_call_question_list_with_auth_user</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/polling/tests/test_views.html#QuestionViewTest.test_call_question_list_with_auth_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polling.tests.test_views.QuestionViewTest.test_call_question_list_with_auth_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>TestCase for view polling list with auth user login
+should return 200 and on create page</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">tests Package</a><ul>
+<li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">tests</span></tt> Package</a></li>
+<li><a class="reference internal" href="#module-polling.tests.test_definitions"><tt class="docutils literal"><span class="pre">test_definitions</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-polling.tests.test_forms"><tt class="docutils literal"><span class="pre">test_forms</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-polling.tests.test_models"><tt class="docutils literal"><span class="pre">test_models</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-polling.tests.test_views"><tt class="docutils literal"><span class="pre">test_views</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="polling.templatetags.html"
+                        title="previous chapter">templatetags Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/polling.tests.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="polling.templatetags.html" title="templatetags Package"
+             >previous</a> |</li>
+        <li><a href="index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="polling.html" >Polling Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, firdan.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

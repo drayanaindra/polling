@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>polling.tests.test_views &mdash; polling 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="polling 0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="polling.tests" href="../tests.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../tests.html" accesskey="U">polling.tests</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for polling.tests.test_views</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">pdb</span>
+
+<span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">django.test.client</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span> <span class="nn">django.test.utils</span> <span class="kn">import</span> <span class="n">override_settings</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse_lazy</span><span class="p">,</span> <span class="n">reverse</span>
+
+<span class="kn">from</span> <span class="nn">polling.views</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">test_definitions</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="QuestionViewTest"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_views.QuestionViewTest">[docs]</a><span class="k">class</span> <span class="nc">QuestionViewTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="QuestionViewTest.setUp"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_views.QuestionViewTest.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">create_user</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span><span class="s">&#39;pass&#39;</span><span class="p">)</span>
+        <span class="n">create_question</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="s">&#39;test&#39;</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+        <span class="n">TestCase</span><span class="o">.</span><span class="n">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="QuestionViewTest.test_call_question_list_anonymous"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_views.QuestionViewTest.test_call_question_list_anonymous">[docs]</a>    <span class="k">def</span> <span class="nf">test_call_question_list_anonymous</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        TestCase for view polling list if not auth user login</span>
+<span class="sd">        should display question list page</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;polling:question_list&#39;</span><span class="p">))</span>
+<span class="c">#       pdb.set_trace()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="c"># should display polling/question_list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s">&quot;polling/question_list.html&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">template_name</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="QuestionViewTest.test_call_question_list_with_auth_user"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_views.QuestionViewTest.test_call_question_list_with_auth_user">[docs]</a>    <span class="k">def</span> <span class="nf">test_call_question_list_with_auth_user</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        TestCase for view polling list with auth user login</span>
+<span class="sd">        should return 200 and on create page</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># login</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;user&#39;</span><span class="p">,</span><span class="n">password</span><span class="o">=</span><span class="s">&#39;pass&#39;</span><span class="p">)</span>
+        <span class="c"># request to create poll</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&quot;polling:question_list&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">request</span><span class="p">[</span><span class="s">&#39;PATH_INFO&#39;</span><span class="p">],</span><span class="s">&#39;/poll/&#39;</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="CreatePollViewTest"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_views.CreatePollViewTest">[docs]</a><span class="k">class</span> <span class="nc">CreatePollViewTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="CreatePollViewTest.setUp"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_views.CreatePollViewTest.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">create_user</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span><span class="s">&#39;pass&#39;</span><span class="p">)</span>
+        <span class="n">create_question</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="s">&#39;test&#39;</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+        <span class="n">TestCase</span><span class="o">.</span><span class="n">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="CreatePollViewTest.test_call_redirected_when_calling_create_with_unauth_login"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_views.CreatePollViewTest.test_call_redirected_when_calling_create_with_unauth_login">[docs]</a>    <span class="k">def</span> <span class="nf">test_call_redirected_when_calling_create_with_unauth_login</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        TestCase for view polling list with auth user login</span>
+<span class="sd">        should redirected to login page</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;polling:create&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span><span class="mi">302</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span> <span class="n">response</span><span class="p">[</span><span class="s">&#39;location&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;/accounts/login&#39;</span><span class="p">))</span>
+        </div>
+<div class="viewcode-block" id="CreatePollViewTest.test_call_create_when_auth"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_views.CreatePollViewTest.test_call_create_when_auth">[docs]</a>    <span class="k">def</span> <span class="nf">test_call_create_when_auth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; show status_code 200 and goto create page &quot;&quot;&quot;</span>
+        
+        <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;user&#39;</span><span class="p">,</span><span class="n">password</span><span class="o">=</span><span class="s">&#39;pass&#39;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;polling:create&#39;</span><span class="p">))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span>
+        <span class="c"># should request a poll/create page</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">request</span><span class="p">[</span><span class="s">&#39;PATH_INFO&#39;</span><span class="p">],</span><span class="s">&#39;/poll/create/&#39;</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="CreatePollViewTest.test_form_valid"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_views.CreatePollViewTest.test_form_valid">[docs]</a>    <span class="k">def</span> <span class="nf">test_form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">success</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;user&#39;</span><span class="p">,</span><span class="n">password</span><span class="o">=</span><span class="s">&#39;pass&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">success</span><span class="p">)</span>
+        
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;polling:create&#39;</span><span class="p">),{</span><span class="s">&#39;question_title&#39;</span><span class="p">:</span><span class="s">&#39;test_123&#39;</span><span class="p">,</span>
+                                                               <span class="s">&#39;question_text&#39;</span><span class="p">:</span><span class="s">&#39;test&#39;</span><span class="p">,</span>
+                                                               <span class="s">&#39;choice_1&#39;</span><span class="p">:</span><span class="s">&#39;test&#39;</span><span class="p">,</span>
+                                                               <span class="s">&#39;choice_2&#39;</span><span class="p">:</span><span class="s">&#39;test&#39;</span><span class="p">})</span>
+        <span class="c"># redirected to votes page</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span><span class="mi">302</span><span class="p">)</span>
+        <span class="c"># check objects Question</span>
+        <span class="n">qobject</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;test_123&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">qobject</span><span class="p">)</span>
+        </div></div>
+<div class="viewcode-block" id="DeletePollViewTest"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_views.DeletePollViewTest">[docs]</a><span class="k">class</span> <span class="nc">DeletePollViewTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="DeletePollViewTest.setUp"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_views.DeletePollViewTest.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">create_user</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span><span class="s">&#39;pass&#39;</span><span class="p">)</span>
+        <span class="n">create_user</span><span class="p">(</span><span class="s">&#39;owner&#39;</span><span class="p">,</span><span class="s">&#39;pass&#39;</span><span class="p">)</span>
+        <span class="n">TestCase</span><span class="o">.</span><span class="n">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="DeletePollViewTest.test_delete_from_auth_not_owner"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_views.DeletePollViewTest.test_delete_from_auth_not_owner">[docs]</a>    <span class="k">def</span> <span class="nf">test_delete_from_auth_not_owner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># login as user</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;user&#39;</span><span class="p">,</span><span class="n">password</span><span class="o">=</span><span class="s">&#39;pass&#39;</span><span class="p">)</span>
+        <span class="c"># create poll using owner</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;owner&#39;</span><span class="p">)</span>
+        
+        <span class="n">create_question</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+        <span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+        
+        <span class="c"># using GET</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;polling:delete&#39;</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">question</span><span class="o">.</span><span class="n">id</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span><span class="mi">403</span><span class="p">)</span>
+        
+        <span class="c"># using POST</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;polling:delete&#39;</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">question</span><span class="o">.</span><span class="n">id</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span><span class="mi">403</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="DeletePollViewTest.test_delete_on_not_exist"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_views.DeletePollViewTest.test_delete_on_not_exist">[docs]</a>    <span class="k">def</span> <span class="nf">test_delete_on_not_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;polling:delete&#39;</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="mi">111</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">404</span> <span class="p">)</span>
+    </div>
+<div class="viewcode-block" id="DeletePollViewTest.test_delete_from_auth_and_owner"><a class="viewcode-back" href="../../../polling.tests.html#polling.tests.test_views.DeletePollViewTest.test_delete_from_auth_and_owner">[docs]</a>    <span class="k">def</span> <span class="nf">test_delete_from_auth_and_owner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;owner&#39;</span><span class="p">,</span><span class="n">password</span><span class="o">=</span><span class="s">&#39;pass&#39;</span><span class="p">)</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;owner&#39;</span><span class="p">)</span>
+        
+        <span class="n">create_question</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="s">&#39;test_delete&#39;</span><span class="p">,</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+        <span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;test_delete&#39;</span><span class="p">)</span>
+
+        <span class="c"># still in the page</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;polling:delete&#39;</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">question</span><span class="o">.</span><span class="n">id</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
+        
+        <span class="c"># redirected when success to question_list</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;polling:delete&#39;</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">question</span><span class="o">.</span><span class="n">id</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRedirects</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> 
+                             <span class="n">reverse</span><span class="p">(</span><span class="s">&#39;polling:question_list&#39;</span><span class="p">),</span> 
+                             <span class="n">status_code</span><span class="o">=</span><span class="mi">302</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">polling 0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../tests.html" >polling.tests</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, firdan.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

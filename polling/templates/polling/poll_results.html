@@ -1,0 +1,68 @@
+{% extends "polling/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+  <h3 class="set2">{{ question.title|capfirst }}</h3>
+  
+  <div class="total_vote navbar navbar-default">
+    <ul class="nav navbar-nav">
+      <li> <a href="#">Total Vote | <small class="muted">{{ question.created_on|timesince }} ago</small></a></li>
+      <li class="pull-right"> <a href="#"><span class="badge">{{ total_votes }}</span></a></li>
+    </ul>
+  </div>
+  
+  <p class="news-line-pad">
+      {{ question.text }}
+  </p>
+  {% if total_votes %}
+  <div id="pie_chart" style="width:500;height:200;"><div class="spinner"></div></div>
+  {% else %}
+  <h2>No Votes are available</h2>
+  <p>Please vote <a href="{% url 'polling:tappolling_question' poll_slug %}">here</a></p>
+  {% endif %}
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+{{ block.super }}
+{% autoescape off %}
+<script type="text/javascript">
+	// Load the Visualization API and the piechart package.
+      google.load('visualization', '1.0', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Data');
+        data.addColumn('number', 'Votes');
+        
+        data_list =  [ {% for data, votes in data_list %} ['{{data}}', {{votes}}],{%endfor%} ];
+        
+        data.addRows( data_list );
+
+        // Set chart options
+        var options = {'title': '{{ jstitle | capfirst }}' ,
+                       'sliceVisibilityThreshold':0,
+                       'width':500,
+                       'height':200,
+                       'is3D':true};
+
+		// var pie = $(".pie_class")
+        // // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById("pie_chart"));
+        // var chart = new google.visualization.PieChart(pie);
+        chart.draw(data, options);
+      }
+      
+</script>
+{% endautoescape %}
+{% endblock scripts %}
