@@ -1,0 +1,74 @@
+# Front end files
+node_modules
+dist
+.tmp
+bower_components
+lokamedia/frontend/app/bower_components/
+_data/
+lokamedia/frontend/app/css
+
+# backend files:
+# spider jobs
+tools/crawlers/jobs
+
+# Python bytecode:
+*.py[co]
+
+# Packaging files:
+*.egg*
+
+# Editor temp files:
+*.swp
+*~
+
+# Sphinx docs:
+build
+
+# SQLite3 database files:
+*.db
+*.sqlite3
+
+# Logs:
+*.log
+
+# SASS
+.sass-cache
+
+# CSS
+main.css
+staff.css
+
+# Media and assets directory
+media
+assets
+
+# Theme static files
+static/themes
+
+# Production settings
+whoosh_index/
+
+# merge 
+*.orig
+
+# temporary files
+temp
+tmp
+
+# backup files
+bak
+BAK
+backup
+*.bak
+
+# IDE
+.project
+.pydevproject
+.settings
+
+# html coverage
+htmlcov
+.coverage
+
+# configuration files
+deploy.conf
